@@ -12,13 +12,12 @@ public class Alumno {
     private boolean estado;
     private int IDalumno;
 
-    public Alumno(Integer dni, String nombre, String apellido, LocalDate fechaNacimiento, boolean estado, int IDalumno) {
+    public Alumno(Integer dni, String nombre, String apellido, LocalDate fechaNacimiento, boolean estado) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
         this.estado = estado;
-        this.IDalumno = IDalumno;
     }
 
     public Alumno() {

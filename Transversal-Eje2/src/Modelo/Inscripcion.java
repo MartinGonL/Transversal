@@ -8,14 +8,14 @@ public class Inscripcion {
     private Integer IDalumno;
     private Integer IDmateria;
     private Integer nota;
-    private boolean inscripto;
+    private boolean recursante;
 
-    public Inscripcion(Integer IDinscripcion, Integer IDalumno, Integer IDmateria, Integer nota, boolean inscripto) {
+    public Inscripcion(Integer IDinscripcion, Integer IDalumno, Integer IDmateria, Integer nota, boolean recursante) {
         this.IDinscripcion = IDinscripcion;
         this.IDalumno = IDalumno;
         this.IDmateria = IDmateria;
         this.nota = nota;
-        this.inscripto = inscripto;
+        this.recursante = recursante;
     }
 
     public Inscripcion() {
@@ -53,12 +53,12 @@ public class Inscripcion {
         this.nota = nota;
     }
 
-    public boolean isInscripto() {
-        return inscripto;
+    public boolean isRecursante() {
+        return recursante;
     }
 
-    public void setInscripto(boolean inscripto) {
-        this.inscripto = inscripto;
+    public void setRecursante(boolean recursante) {
+        this.recursante = recursante;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Inscripcion {
         hash = 53 * hash + Objects.hashCode(this.IDalumno);
         hash = 53 * hash + Objects.hashCode(this.IDmateria);
         hash = 53 * hash + Objects.hashCode(this.nota);
-        hash = 53 * hash + (this.inscripto ? 1 : 0);
+        hash = 53 * hash + (this.recursante ? 1 : 0);
         return hash;
     }
 
@@ -84,7 +84,7 @@ public class Inscripcion {
             return false;
         }
         final Inscripcion other = (Inscripcion) obj;
-        if (this.inscripto != other.inscripto) {
+        if (this.recursante != other.recursante) {
             return false;
         }
         if (!Objects.equals(this.IDinscripcion, other.IDinscripcion)) {
@@ -101,7 +101,7 @@ public class Inscripcion {
 
     @Override
     public String toString() {
-        return "Inscripcion: \nID de Inscripcion: " + IDinscripcion + ". ID de Alumno: " + IDalumno + ". ID de Materia: " + IDmateria + ". Nota: " + nota + ". Inscripto: " + inscripto + ".";
+        return "Inscripcion: \nID de Inscripcion: " + IDinscripcion + ". ID de Alumno: " + IDalumno + ". ID de Materia: " + IDmateria + ". Nota: " + nota + ". Inscripto: " + recursante + ".";
     }
     
     

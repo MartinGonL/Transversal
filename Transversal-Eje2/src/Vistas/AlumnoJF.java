@@ -1,9 +1,20 @@
 package Vistas;
 
+import Modelo.Alumno;
+import Persistencia.Check;
+import Persistencia.Coneccion;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
+    Coneccion coneccion;
+    
     public AlumnoJF() {
         initComponents();
+        this.coneccion = new Coneccion();
+        
+        coneccion.conectar();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -13,16 +24,14 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         contenedorJP = new javax.swing.JPanel();
         alumnoJL = new javax.swing.JLabel();
         nombreJL = new javax.swing.JLabel();
-        idJL = new javax.swing.JLabel();
         dniJL = new javax.swing.JLabel();
         siguienteJB = new javax.swing.JButton();
-        apellidoJL1 = new javax.swing.JLabel();
+        apellidoJL = new javax.swing.JLabel();
         nombreJTF = new javax.swing.JTextField();
         apellidoJTF = new javax.swing.JTextField();
         dniJTF = new javax.swing.JTextField();
-        idJTF = new javax.swing.JTextField();
         fechaNacJL = new javax.swing.JLabel();
-        apellidoJTF1 = new javax.swing.JTextField();
+        fechaJTF = new javax.swing.JTextField();
         activoJL = new javax.swing.JLabel();
         activJChB = new javax.swing.JCheckBox();
 
@@ -43,11 +52,6 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         nombreJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         nombreJL.setText("Nombre:");
 
-        idJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        idJL.setForeground(new java.awt.Color(255, 255, 255));
-        idJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        idJL.setText("ID:");
-
         dniJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         dniJL.setForeground(new java.awt.Color(255, 255, 255));
         dniJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -63,10 +67,10 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             }
         });
 
-        apellidoJL1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        apellidoJL1.setForeground(new java.awt.Color(255, 255, 255));
-        apellidoJL1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        apellidoJL1.setText("Apellido:");
+        apellidoJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        apellidoJL.setForeground(new java.awt.Color(255, 255, 255));
+        apellidoJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        apellidoJL.setText("Apellido:");
 
         nombreJTF.setBackground(new java.awt.Color(255, 255, 255));
         nombreJTF.setForeground(new java.awt.Color(0, 0, 0));
@@ -79,18 +83,14 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         dniJTF.setForeground(new java.awt.Color(0, 0, 0));
         dniJTF.setMinimumSize(new java.awt.Dimension(68, 22));
 
-        idJTF.setBackground(new java.awt.Color(255, 255, 255));
-        idJTF.setForeground(new java.awt.Color(0, 0, 0));
-        idJTF.setMinimumSize(new java.awt.Dimension(68, 22));
-
         fechaNacJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         fechaNacJL.setForeground(new java.awt.Color(255, 255, 255));
         fechaNacJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         fechaNacJL.setText("Fecha de Nacimiento:");
 
-        apellidoJTF1.setBackground(new java.awt.Color(255, 255, 255));
-        apellidoJTF1.setForeground(new java.awt.Color(0, 0, 0));
-        apellidoJTF1.setMinimumSize(new java.awt.Dimension(68, 22));
+        fechaJTF.setBackground(new java.awt.Color(255, 255, 255));
+        fechaJTF.setForeground(new java.awt.Color(0, 0, 0));
+        fechaJTF.setMinimumSize(new java.awt.Dimension(68, 22));
 
         activoJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         activoJL.setForeground(new java.awt.Color(255, 255, 255));
@@ -120,25 +120,23 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
                                     .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
-                                            .addComponent(apellidoJL1)
+                                            .addComponent(apellidoJL)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(apellidoJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(contenedorJPLayout.createSequentialGroup()
                                             .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(idJL)
                                                 .addComponent(dniJL)
                                                 .addComponent(activoJL))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(dniJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(idJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(activJChB))))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(siguienteJB))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
                                     .addComponent(fechaNacJL)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(apellidoJTF1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(fechaJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 20, Short.MAX_VALUE))))
         );
         contenedorJPLayout.setVerticalGroup(
@@ -148,34 +146,33 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 .addGap(27, 27, 27)
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fechaNacJL)
-                    .addComponent(apellidoJTF1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fechaJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nombreJL)
-                    .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(apellidoJL1)
-                    .addComponent(apellidoJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(apellidoJL)
+                    .addComponent(apellidoJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dniJL)
-                    .addComponent(dniJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dniJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(contenedorJPLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(idJL)
-                            .addComponent(idJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(activoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(activJChB, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
-                        .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorJPLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(siguienteJB)
-                        .addGap(19, 19, 19))))
+                        .addGap(19, 19, 19))
+                    .addGroup(contenedorJPLayout.createSequentialGroup()
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(activoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(activJChB, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -193,22 +190,38 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void siguienteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteJBActionPerformed
+      boolean flag = Check.checkField(contenedorJP);
       
+        if (flag) 
+        {
+            int dni = Integer.parseInt(dniJTF.getText());
+            String nombre = nombreJTF.getText();
+            String apellido = apellidoJTF.getText();
+            LocalDate fecha = LocalDate.parse(fechaJTF.getText());
+            boolean estado = activJChB.isSelected();
+            
+            Alumno alumno = new Alumno(dni, nombre, apellido, fecha, estado);
+            coneccion.cargarDato(alumno);
+            Check.cleanField(contenedorJP);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
+        }
+        
     }//GEN-LAST:event_siguienteJBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox activJChB;
     private javax.swing.JLabel activoJL;
     private javax.swing.JLabel alumnoJL;
-    private javax.swing.JLabel apellidoJL1;
+    private javax.swing.JLabel apellidoJL;
     private javax.swing.JTextField apellidoJTF;
-    private javax.swing.JTextField apellidoJTF1;
     private javax.swing.JPanel contenedorJP;
     private javax.swing.JLabel dniJL;
     private javax.swing.JTextField dniJTF;
+    private javax.swing.JTextField fechaJTF;
     private javax.swing.JLabel fechaNacJL;
-    private javax.swing.JLabel idJL;
-    private javax.swing.JTextField idJTF;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel nombreJL;
     private javax.swing.JTextField nombreJTF;
