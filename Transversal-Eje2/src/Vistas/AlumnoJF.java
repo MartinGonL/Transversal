@@ -14,12 +14,19 @@ import javax.swing.JTextField;
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
     Coneccion coneccion;
+    private final String ALUMNO;
     private int FLAG;
+    /**
+     * Variable temporal.
+     */
+    private String ID;
     
     public AlumnoJF() {
         initComponents();
         this.coneccion = new Coneccion();
         this.FLAG = 0;
+        this.ID = "";
+        this.ALUMNO = "`alumno`";
         
         coneccion.conectar();
     }
@@ -81,6 +88,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         nombreJTF.setName("`nombre`"); // NOI18N
 
         apellidoJTF.setBackground(new java.awt.Color(255, 255, 255));
+        apellidoJTF.setForeground(new java.awt.Color(0, 0, 0));
         apellidoJTF.setMinimumSize(new java.awt.Dimension(68, 22));
         apellidoJTF.setName("`apellido`"); // NOI18N
 
@@ -296,37 +304,92 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_crearJBActionPerformed
 
     private void actualizarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarJBActionPerformed
-        if (FLAG == 0) 
+        if (FLAG == 0 | FLAG == 3) 
         {
             buscarJBActionPerformed(evt);
+
+            FLAG = (FLAG == 0) ? 1 : 2;
             
             dniJL.setText("ID:");
+            dniJTF.setBackground(new Color(0,102,0));
+            dniJTF.setForeground(new Color(255,255,255));
             buscarJB.setBackground(new Color(0,102,0));
             deleteJB.setText("Cancelar");
-            
-            FLAG = 1;
         }
+        else 
+        {
+            HashMap<String, String> domsAtr = new HashMap();
         
-        
+            for (Component componente : contenedorJP.getComponents()) 
+            {
+                switch (componente) 
+                {
+                    case JTextField txt -> 
+                    {
+                        if (!txt.getText().equals("")) 
+                        {
+                            switch (txt.getName()) 
+                            {
+                                case "`dni`" -> { domsAtr.put(txt.getName(), txt.getText()); }
+                                case "`apellido`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                                case "`nombre`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                                case "`fechaNacimiento`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                            }
+                        }
+                    }
+                    case JCheckBox check -> 
+                    {
+                        if (check.isSelected()) 
+                        {
+                            domsAtr.put(check.getName(), String.valueOf(check.isSelected()));
+                        }
+                    }
+                    default -> {}
+                }
+            }
+            deleteJBActionPerformed(evt);
+            coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+        }
     }//GEN-LAST:event_actualizarJBActionPerformed
 
     private void desJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desJBActionPerformed
-        // TODO add your handling code here:
+        if (FLAG == 0) {
+            FLAG = 3;
+            actualizarJBActionPerformed(evt);
+        }
+        else 
+        {
+            HashMap<String, String> domsAtr = new HashMap();
+            domsAtr.put("`estado`", "false");
+            
+            int confirm = JOptionPane.showConfirmDialog(rootPane, "Seguro que desea realizar la baja?");
+            if (confirm == 0) coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+            else JOptionPane.showConfirmDialog(rootPane, "Operacion cancelada.");
+            
+            deleteJBActionPerformed(evt);
+        }
+        
+        
     }//GEN-LAST:event_desJBActionPerformed
 
     private void deleteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJBActionPerformed
-        // TODO add your handling code here:
         try 
         {
             if (FLAG != 0) throw new NumberFormatException();
         }
         catch (NumberFormatException ex) 
         {
+            Check.cleanField(contenedorJP);
+            Check.colorField(contenedorJP, new Color(255,255,255), new Color(0,0,0));
             deleteJB.setText("Eliminar");
             dniJL.setText("DNI:");
             buscarJB.setBackground(new Color(255,204,0));
             actualizarJB.setText("Actualizar");
             actualizarJB.setBackground(new Color(255,204,0));
+            desJB.setEnabled(true);
+            crearJB.setEnabled(true);
+            actualizarJB.setEnabled(true);
+            buscarJB.setEnabled(true);
             
             FLAG = 0;
         }
@@ -335,11 +398,10 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
     private void buscarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarJBActionPerformed
         HashMap<String, String> domsAtr = new HashMap();
-        String alumno = "`alumno`";
         
         try 
         {
-            if (FLAG != 0) throw new NumberFormatException();
+            if (FLAG != 0 & FLAG != 3) throw new NumberFormatException();
             
             for (Component componente : contenedorJP.getComponents()) 
             {
@@ -371,17 +433,37 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         }
         catch (NumberFormatException ex) 
         {
-            domsAtr.put("`idAlumno`", dniJTF.getText());
-            deleteJBActionPerformed(evt);
-            deleteJB.setText("Cancelar");
-            actualizarJB.setText("Guardar");
-            actualizarJB.setBackground(new Color(0,102,0));
+            ID = dniJTF.getText();
+            domsAtr.put("`idAlumno`", ID);
             
-            FLAG = 1;
+            switch (FLAG) {
+                case 1 -> {
+                    deleteJBActionPerformed(evt);
+                    deleteJB.setText("Cancelar");
+
+                    Check.colorField(contenedorJP, new Color(0, 102, 0), new Color(255,255,255));
+                    actualizarJB.setBackground(new Color(0, 102, 0));
+                    actualizarJB.setText("Guardar");
+                    
+                    crearJB.setEnabled(false);
+                    buscarJB.setEnabled(false);
+                    desJB.setEnabled(false);
+                    
+                    FLAG = 1;
+                }
+                case 2 -> {
+                    crearJB.setEnabled(false);
+                    actualizarJB.setEnabled(false);
+                    buscarJB.setEnabled(false);
+                    deleteJB.setText("Cancelar");
+
+                    desJBActionPerformed(evt);
+                }
+            }
         }
         finally 
         {
-            coneccion.buscarDato(alumno, domsAtr);
+            coneccion.buscarDato(ALUMNO, domsAtr);
             Check.cleanField(contenedorJP);
         }
     }//GEN-LAST:event_buscarJBActionPerformed

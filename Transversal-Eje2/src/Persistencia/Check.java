@@ -1,5 +1,6 @@
 package Persistencia;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -22,9 +23,9 @@ public class Check {
 
         for (Component component : jPanel.getComponents()) 
         {
-            if (component instanceof JTextField jTextField) 
+            if (component instanceof JTextField txt) 
             {
-                flag = !jTextField.getText().equals("");
+                flag = !txt.getText().equals("");
             }
         }
 
@@ -50,8 +51,16 @@ public class Check {
         }
     }
     
-    public static void data() {
+    public static void colorField(JPanel jPanel, Color fondo, Color letra) {
         
+        for (Component component : jPanel.getComponents()) 
+        {
+            if (component instanceof JTextField txt) 
+            {
+                txt.setBackground(fondo);
+                txt.setForeground(letra);
+            }
+        }
     }
 
 }

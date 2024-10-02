@@ -101,8 +101,8 @@ public class Coneccion {
      * @param domsAtr 
      */
     public void buscarDato(String relacion, HashMap<String, String> domsAtr) {
+        String sql = "Consulta SQL";
         String cond = "";
-        String sql = "";
         int count = 0;
         
         if(!domsAtr.isEmpty()) cond = " WHERE ";
@@ -121,7 +121,6 @@ public class Coneccion {
             count++;
         }
         sql = "SELECT * FROM " + relacion + cond;
-        System.out.println(sql);
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
@@ -129,7 +128,7 @@ public class Coneccion {
             
             while (resultado.next()) 
             {
-                System.out.println("ID Alumno: " + resultado.getInt("idAlumno"));
+                System.out.println("\nID Alumno: " + resultado.getInt("idAlumno"));
                 System.out.println("DNI: " + resultado.getInt("dni"));
                 System.out.println("Apellido: " + resultado.getString("apellido"));
                 System.out.println("Nombre: " + resultado.getString("nombre"));
@@ -140,6 +139,37 @@ public class Coneccion {
         catch (SQLException ex) 
         {
             JOptionPane.showMessageDialog(null, "No se han encontrado resultados para la busqueda.");
+        }
+    }
+    
+    /*``*/
+    public void actualizarDato(String relacion, String ID, HashMap<String, String> domsAtr) {
+        String sql = "UPDATE " + relacion + " SET ";
+        int count = 0;
+        
+        for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
+        {
+            sql += domAtr.getKey() + " = " + domAtr.getValue();
+            
+            if (domsAtr.size() > 1 & count != domsAtr.size()-1) sql += ", ";
+            
+            count++;
+        }
+        
+        sql += " WHERE `idAlumno` = " + ID;
+        
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            int filas = sentencia.executeUpdate();
+            if (filas > 0) 
+            {
+                JOptionPane.showMessageDialog(null, "Cambios Guardados.");
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "Error en la Sintaxis.");
         }
     }
     
