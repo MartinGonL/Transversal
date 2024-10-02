@@ -94,41 +94,42 @@ public class Coneccion {
         }
     }
     
+    /**
+     * Crear un objeto con los valores recuperados de la BDD para luego insertarlo en un array del metodo y devolverlo a la vista.
+     * 
+     * @param relacion
+     * @param domsAtr 
+     */
     public void buscarDato(String relacion, HashMap<String, String> domsAtr) {
-        String cond = " WHERE ";
-        String atrs = "";
+        String cond = "";
+        String sql = "";
         int count = 0;
         
+        if(!domsAtr.isEmpty()) cond = " WHERE ";
+
         for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
         {
             if (domAtr.getKey().equals("`fechaNacimiento`")) 
             {
                 LocalDate fechaActual = LocalDate.now();
                 cond += domAtr.getKey() + " BETWEEN " + domAtr.getValue() + " AND '" + fechaActual + "'";
-            } 
+            }
             else cond += domAtr.getKey() + " = " + domAtr.getValue();
             
-            atrs += domAtr.getKey();
-            
-            if (domsAtr.size() > 1 & count != domsAtr.size()-1) 
-            {
-                cond += " AND ";
-                atrs += ", ";
-            }
+            if (domsAtr.size() > 1 & count != domsAtr.size()-1) cond += " AND ";
             
             count++;
         }
-        
-        String sql = "SELECT " + atrs + " FROM " + relacion /*+ cond*/;
+        sql = "SELECT * FROM " + relacion + cond;
         System.out.println(sql);
-        
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
             resultado = sentencia.executeQuery();
             
-            while (resultado.next()) {
-//                System.out.println("ID Alumno: " + resultado.getInt("idAlumno"));
+            while (resultado.next()) 
+            {
+                System.out.println("ID Alumno: " + resultado.getInt("idAlumno"));
                 System.out.println("DNI: " + resultado.getInt("dni"));
                 System.out.println("Apellido: " + resultado.getString("apellido"));
                 System.out.println("Nombre: " + resultado.getString("nombre"));

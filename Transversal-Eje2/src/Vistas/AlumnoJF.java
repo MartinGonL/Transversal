@@ -3,10 +3,10 @@ package Vistas;
 import Modelo.Alumno;
 import Persistencia.Check;
 import Persistencia.Coneccion;
+import java.awt.Color;
 import java.awt.Component;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -14,10 +14,12 @@ import javax.swing.JTextField;
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
     Coneccion coneccion;
+    private int FLAG;
     
     public AlumnoJF() {
         initComponents();
         this.coneccion = new Coneccion();
+        this.FLAG = 0;
         
         coneccion.conectar();
     }
@@ -86,11 +88,6 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         dniJTF.setForeground(new java.awt.Color(0, 0, 0));
         dniJTF.setMinimumSize(new java.awt.Dimension(68, 22));
         dniJTF.setName("`dni`"); // NOI18N
-        dniJTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dniJTFActionPerformed(evt);
-            }
-        });
 
         fechaNacJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         fechaNacJL.setForeground(new java.awt.Color(255, 255, 255));
@@ -299,7 +296,18 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_crearJBActionPerformed
 
     private void actualizarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarJBActionPerformed
-        // TODO add your handling code here:
+        if (FLAG == 0) 
+        {
+            buscarJBActionPerformed(evt);
+            
+            dniJL.setText("ID:");
+            buscarJB.setBackground(new Color(0,102,0));
+            deleteJB.setText("Cancelar");
+            
+            FLAG = 1;
+        }
+        
+        
     }//GEN-LAST:event_actualizarJBActionPerformed
 
     private void desJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desJBActionPerformed
@@ -308,47 +316,75 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
     private void deleteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJBActionPerformed
         // TODO add your handling code here:
+        try 
+        {
+            if (FLAG != 0) throw new NumberFormatException();
+        }
+        catch (NumberFormatException ex) 
+        {
+            deleteJB.setText("Eliminar");
+            dniJL.setText("DNI:");
+            buscarJB.setBackground(new Color(255,204,0));
+            actualizarJB.setText("Actualizar");
+            actualizarJB.setBackground(new Color(255,204,0));
+            
+            FLAG = 0;
+        }
+        finally {}
     }//GEN-LAST:event_deleteJBActionPerformed
 
     private void buscarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarJBActionPerformed
-        HashMap<String, String> doms = new HashMap();
+        HashMap<String, String> domsAtr = new HashMap();
         String alumno = "`alumno`";
         
-        for (Component componente : contenedorJP.getComponents()) 
+        try 
         {
-            switch (componente) 
+            if (FLAG != 0) throw new NumberFormatException();
+            
+            for (Component componente : contenedorJP.getComponents()) 
             {
-                case JTextField txt -> 
+                switch (componente) 
                 {
-                    if (!txt.getText().equals("")) 
+                    case JTextField txt -> 
                     {
-                        switch (txt.getName()) 
+                        if (!txt.getText().equals("")) 
                         {
-                            case "`dni`" -> { doms.put(txt.getName(), txt.getText()); }
-                            case "`apellido`" -> { doms.put(txt.getName(), "'" + txt.getText() + "'"); }
-                            case "`nombre`" -> { doms.put(txt.getName(), "'" + txt.getText() + "'"); }
-                            case "`fechaNacimiento`" -> { doms.put(txt.getName(), "'" + txt.getText() + "'"); }
+                            switch (txt.getName()) 
+                            {
+                                case "`dni`" -> { domsAtr.put(txt.getName(), txt.getText()); }
+                                case "`apellido`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                                case "`nombre`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                                case "`fechaNacimiento`" -> { domsAtr.put(txt.getName(), "'" + txt.getText() + "'"); }
+                            }
                         }
                     }
-                }
-                case JCheckBox check -> 
-                {
-                    if (check.isSelected()) 
+                    case JCheckBox check -> 
                     {
-                        doms.put(check.getName(), String.valueOf(check.isSelected()));
+                        if (check.isSelected()) 
+                        {
+                            domsAtr.put(check.getName(), String.valueOf(check.isSelected()));
+                        }
                     }
+                    default -> {}
                 }
-                default -> {}
             }
         }
-
-        if (!doms.isEmpty()) coneccion.buscarDato(alumno, doms);
-        else JOptionPane.showMessageDialog(rootPane, "Complete al menos un campo.");
+        catch (NumberFormatException ex) 
+        {
+            domsAtr.put("`idAlumno`", dniJTF.getText());
+            deleteJBActionPerformed(evt);
+            deleteJB.setText("Cancelar");
+            actualizarJB.setText("Guardar");
+            actualizarJB.setBackground(new Color(0,102,0));
+            
+            FLAG = 1;
+        }
+        finally 
+        {
+            coneccion.buscarDato(alumno, domsAtr);
+            Check.cleanField(contenedorJP);
+        }
     }//GEN-LAST:event_buscarJBActionPerformed
-
-    private void dniJTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dniJTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dniJTFActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox activJChB;
