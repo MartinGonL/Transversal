@@ -27,7 +27,7 @@ public class InicioJDP extends javax.swing.JFrame {
         materiaJM = new javax.swing.JMenu();
         materiaJMItem = new javax.swing.JMenuItem();
         inscripcionJM = new javax.swing.JMenu();
-        registrarJMItem = new javax.swing.JMenuItem();
+        inscribirJMItem = new javax.swing.JMenuItem();
 
         jScrollPane2.setViewportView(jTextPane1);
 
@@ -50,7 +50,7 @@ public class InicioJDP extends javax.swing.JFrame {
         );
         escritorioDPLayout.setVerticalGroup(
             escritorioDPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
+            .addGap(0, 350, Short.MAX_VALUE)
         );
 
         tablaJT.setModel(new javax.swing.table.DefaultTableModel(
@@ -85,12 +85,14 @@ public class InicioJDP extends javax.swing.JFrame {
         );
         panelTablaJPLayout.setVerticalGroup(
             panelTablaJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+            .addGroup(panelTablaJPLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
-        jMenuBar1.setBackground(new java.awt.Color(0, 0, 0));
+        jMenuBar1.setBackground(new java.awt.Color(51, 51, 51));
         jMenuBar1.setBorder(null);
-        jMenuBar1.setForeground(new java.awt.Color(0, 0, 0));
+        jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
 
         alumnoJM.setText("Alumno");
 
@@ -118,13 +120,13 @@ public class InicioJDP extends javax.swing.JFrame {
 
         inscripcionJM.setText("Inscripcion");
 
-        registrarJMItem.setText("Agregar");
-        registrarJMItem.addActionListener(new java.awt.event.ActionListener() {
+        inscribirJMItem.setText("Agregar");
+        inscribirJMItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registrarJMItemActionPerformed(evt);
+                inscribirJMItemActionPerformed(evt);
             }
         });
-        inscripcionJM.add(registrarJMItem);
+        inscripcionJM.add(inscribirJMItem);
 
         jMenuBar1.add(inscripcionJM);
 
@@ -134,8 +136,11 @@ public class InicioJDP extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelTablaJP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(escritorioDP)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelTablaJP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,7 +175,7 @@ public class InicioJDP extends javax.swing.JFrame {
         escritorioDP.moveToFront(materiaFrame);
     }//GEN-LAST:event_materiaJMItemActionPerformed
 
-    private void registrarJMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarJMItemActionPerformed
+    private void inscribirJMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inscribirJMItemActionPerformed
         escritorioDP.removeAll();
         escritorioDP.repaint();
         
@@ -179,7 +184,7 @@ public class InicioJDP extends javax.swing.JFrame {
 
         escritorioDP.add(inscripcionFrame);
         escritorioDP.moveToFront(inscripcionFrame);
-    }//GEN-LAST:event_registrarJMItemActionPerformed
+    }//GEN-LAST:event_inscribirJMItemActionPerformed
     
     /**
      *     "ID", "Nombre", "Apellido", "Recursante", "Asignatura", "ID"
@@ -220,6 +225,7 @@ public class InicioJDP extends javax.swing.JFrame {
     private javax.swing.JMenu alumnoJM;
     private javax.swing.JMenuItem alumnoJMItem;
     private javax.swing.JDesktopPane escritorioDP;
+    private javax.swing.JMenuItem inscribirJMItem;
     private javax.swing.JMenu inscripcionJM;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -228,7 +234,6 @@ public class InicioJDP extends javax.swing.JFrame {
     private javax.swing.JMenu materiaJM;
     private javax.swing.JMenuItem materiaJMItem;
     private javax.swing.JPanel panelTablaJP;
-    private javax.swing.JMenuItem registrarJMItem;
     private static javax.swing.JTable tablaJT;
     // End of variables declaration//GEN-END:variables
 }

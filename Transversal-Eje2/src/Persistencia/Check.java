@@ -49,5 +49,9 @@ public class Check {
             }
         }
     }
+    
+    public static void data() {
+        
+    }
 
 }

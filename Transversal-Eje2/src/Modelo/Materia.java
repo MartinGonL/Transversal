@@ -9,8 +9,7 @@ public class Materia {
     private Integer año;
     private boolean estado;
 
-    public Materia(Integer IDmateria, String nombre, Integer año, boolean estado) {
-        this.IDmateria = IDmateria;
+    public Materia(String nombre, Integer año, boolean estado) {
         this.nombre = nombre;
         this.año = año;
         this.estado = estado;

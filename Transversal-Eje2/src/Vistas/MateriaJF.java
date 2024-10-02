@@ -1,9 +1,17 @@
 package Vistas;
 
+import Modelo.Materia;
+import Persistencia.Check;
+import Persistencia.Coneccion;
+import javax.swing.JOptionPane;
+
 public class MateriaJF extends javax.swing.JInternalFrame {
 
+    Coneccion coneccion;
+    
     public MateriaJF() {
         initComponents();
+        this.coneccion = new Coneccion();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -13,14 +21,16 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         contenedorJP = new javax.swing.JPanel();
         alumnoJL = new javax.swing.JLabel();
         nombreJL = new javax.swing.JLabel();
-        idJL = new javax.swing.JLabel();
-        siguienteJB = new javax.swing.JButton();
+        crearJB = new javax.swing.JButton();
         nombreJL1 = new javax.swing.JLabel();
         nombreJTF = new javax.swing.JTextField();
         anioJTF = new javax.swing.JTextField();
-        idJTF = new javax.swing.JTextField();
         activJChB = new javax.swing.JCheckBox();
         activoJL = new javax.swing.JLabel();
+        actJB = new javax.swing.JButton();
+        deleteJB = new javax.swing.JButton();
+        buscarJB = new javax.swing.JButton();
+        desJB = new javax.swing.JButton();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -39,18 +49,13 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         nombreJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         nombreJL.setText("Nombre:");
 
-        idJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        idJL.setForeground(new java.awt.Color(255, 255, 255));
-        idJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        idJL.setText("ID:");
-
-        siguienteJB.setBackground(new java.awt.Color(255, 204, 0));
-        siguienteJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
-        siguienteJB.setForeground(new java.awt.Color(255, 255, 255));
-        siguienteJB.setText("Siguiente");
-        siguienteJB.addActionListener(new java.awt.event.ActionListener() {
+        crearJB.setBackground(new java.awt.Color(255, 204, 0));
+        crearJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        crearJB.setForeground(new java.awt.Color(255, 255, 255));
+        crearJB.setText("Crear");
+        crearJB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                siguienteJBActionPerformed(evt);
+                crearJBActionPerformed(evt);
             }
         });
 
@@ -67,10 +72,6 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         anioJTF.setForeground(new java.awt.Color(0, 0, 0));
         anioJTF.setPreferredSize(new java.awt.Dimension(20, 22));
 
-        idJTF.setBackground(new java.awt.Color(255, 255, 255));
-        idJTF.setForeground(new java.awt.Color(0, 0, 0));
-        idJTF.setPreferredSize(new java.awt.Dimension(20, 22));
-
         activJChB.setBackground(new java.awt.Color(0, 51, 102));
         activJChB.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -79,57 +80,117 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         activoJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         activoJL.setText("Activo:");
 
+        actJB.setBackground(new java.awt.Color(255, 204, 0));
+        actJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        actJB.setForeground(new java.awt.Color(255, 255, 255));
+        actJB.setText("Actualizar");
+        actJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actJBActionPerformed(evt);
+            }
+        });
+
+        deleteJB.setBackground(new java.awt.Color(204, 0, 0));
+        deleteJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        deleteJB.setForeground(new java.awt.Color(255, 255, 255));
+        deleteJB.setText("Eliminar");
+        deleteJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJBActionPerformed(evt);
+            }
+        });
+
+        buscarJB.setBackground(new java.awt.Color(255, 204, 0));
+        buscarJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        buscarJB.setForeground(new java.awt.Color(255, 255, 255));
+        buscarJB.setText("Buscar");
+        buscarJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarJBActionPerformed(evt);
+            }
+        });
+
+        desJB.setBackground(new java.awt.Color(255, 204, 0));
+        desJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        desJB.setForeground(new java.awt.Color(255, 255, 255));
+        desJB.setText("Desabilitar");
+        desJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                desJBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout contenedorJPLayout = new javax.swing.GroupLayout(contenedorJP);
         contenedorJP.setLayout(contenedorJPLayout);
         contenedorJPLayout.setHorizontalGroup(
             contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenedorJPLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(alumnoJL)
-                    .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(contenedorJPLayout.createSequentialGroup()
-                            .addGap(66, 66, 66)
-                            .addComponent(siguienteJB))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
-                            .addComponent(nombreJL)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(nombreJL1)
-                                .addGroup(contenedorJPLayout.createSequentialGroup()
-                                    .addGap(46, 46, 46)
-                                    .addComponent(anioJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(idJL)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(idJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(contenedorJPLayout.createSequentialGroup()
-                        .addComponent(activoJL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(activJChB)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(nombreJL1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorJPLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(activoJL)))
+                        .addGap(6, 6, 6)
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(anioJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(activJChB)))
+                    .addGroup(contenedorJPLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(alumnoJL)
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addComponent(nombreJL)
+                                .addGap(6, 6, 6)
+                                .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(29, 29, 29)
+                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(crearJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(actJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(desJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deleteJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buscarJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         contenedorJPLayout.setVerticalGroup(
             contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenedorJPLayout.createSequentialGroup()
-                .addComponent(alumnoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nombreJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nombreJL1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anioJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(idJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(idJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(activoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(activJChB))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(siguienteJB)
-                .addGap(16, 16, 16))
+                    .addGroup(contenedorJPLayout.createSequentialGroup()
+                        .addComponent(alumnoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(nombreJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(contenedorJPLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(nombreJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(17, 17, 17)
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(anioJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nombreJL1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(activJChB, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenedorJPLayout.createSequentialGroup()
+                                .addComponent(activoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(contenedorJPLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(crearJB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(actJB)
+                        .addGap(10, 10, 10)
+                        .addComponent(buscarJB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(desJB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(deleteJB)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -146,22 +207,56 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void siguienteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteJBActionPerformed
+    private void crearJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearJBActionPerformed
+        boolean flag = Check.checkField(contenedorJP);
+
+        if (flag) 
+        {
+            String nombre = nombreJTF.getText();
+            int anio = Integer.parseInt(anioJTF.getText());
+            boolean estado = activJChB.isSelected();
+
+            Materia materia = new Materia(nombre, anio, estado);
+            coneccion.cargarDato(materia);
+            Check.cleanField(contenedorJP);
+        } 
+        else 
+        {
+            JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
+        }
+    }//GEN-LAST:event_crearJBActionPerformed
+
+    private void actJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actJBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actJBActionPerformed
+
+    private void deleteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteJBActionPerformed
+
+    private void buscarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarJBActionPerformed
+        // TODO add your handling code here:
         
-    }//GEN-LAST:event_siguienteJBActionPerformed
+    }//GEN-LAST:event_buscarJBActionPerformed
+
+    private void desJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desJBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_desJBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actJB;
     private javax.swing.JCheckBox activJChB;
     private javax.swing.JLabel activoJL;
     private javax.swing.JLabel alumnoJL;
     private javax.swing.JTextField anioJTF;
+    private javax.swing.JButton buscarJB;
     private javax.swing.JPanel contenedorJP;
-    private javax.swing.JLabel idJL;
-    private javax.swing.JTextField idJTF;
+    private javax.swing.JButton crearJB;
+    private javax.swing.JButton deleteJB;
+    private javax.swing.JButton desJB;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel nombreJL;
     private javax.swing.JLabel nombreJL1;
     private javax.swing.JTextField nombreJTF;
-    private javax.swing.JButton siguienteJB;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,8 +10,7 @@ public class Inscripcion {
     private Integer nota;
     private boolean recursante;
 
-    public Inscripcion(Integer IDinscripcion, Integer IDalumno, Integer IDmateria, Integer nota, boolean recursante) {
-        this.IDinscripcion = IDinscripcion;
+    public Inscripcion(Integer IDalumno, Integer IDmateria, Integer nota, boolean recursante) {
         this.IDalumno = IDalumno;
         this.IDmateria = IDmateria;
         this.nota = nota;

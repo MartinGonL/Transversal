@@ -7,8 +7,11 @@ import Modelo.Materia;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +22,7 @@ public class Coneccion {
     
     private Connection coneccion;
     private PreparedStatement sentencia;
-//    private ResultSet resultado;
+    private ResultSet resultado;
     
     public Coneccion() {
         try 
@@ -62,6 +65,9 @@ public class Coneccion {
                 atributos = "(`nombre_materia`, `año`, `estado`) ";
                 doms = "('" + b.getNombre() + "', '" + b.getAño() + "', " + b.isEstado() + ")";
             }
+            /**
+             * Editar esta parte.
+             */
             case Inscripcion c -> 
             {
                 relacion = "`inscripcion` ";
@@ -88,10 +94,59 @@ public class Coneccion {
         }
     }
     
+    public void buscarDato(String relacion, HashMap<String, String> domsAtr) {
+        String cond = " WHERE ";
+        String atrs = "";
+        int count = 0;
+        
+        for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
+        {
+            if (domAtr.getKey().equals("`fechaNacimiento`")) 
+            {
+                LocalDate fechaActual = LocalDate.now();
+                cond += domAtr.getKey() + " BETWEEN " + domAtr.getValue() + " AND '" + fechaActual + "'";
+            } 
+            else cond += domAtr.getKey() + " = " + domAtr.getValue();
+            
+            atrs += domAtr.getKey();
+            
+            if (domsAtr.size() > 1 & count != domsAtr.size()-1) 
+            {
+                cond += " AND ";
+                atrs += ", ";
+            }
+            
+            count++;
+        }
+        
+        String sql = "SELECT " + atrs + " FROM " + relacion /*+ cond*/;
+        System.out.println(sql);
+        
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
+            
+            while (resultado.next()) {
+//                System.out.println("ID Alumno: " + resultado.getInt("idAlumno"));
+                System.out.println("DNI: " + resultado.getInt("dni"));
+                System.out.println("Apellido: " + resultado.getString("apellido"));
+                System.out.println("Nombre: " + resultado.getString("nombre"));
+                System.out.println("Fecha de Nacimiento: " + resultado.getDate("fechaNacimiento"));
+                System.out.println("Estado: " + resultado.getBoolean("estado"));
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "No se han encontrado resultados para la busqueda.");
+        }
+    }
+    
     public void desconectar () {
         try 
         {
             coneccion.close();    
+            JOptionPane.showInternalMessageDialog(null, "La coneccion a sido finalizada.");
         } 
         catch (SQLException ex) 
         {
