@@ -98,7 +98,7 @@ public class Coneccion {
     public ArrayList<Object> buscarDato(String relacion, HashMap<String, String> domsAtr) {
         ArrayList<Object> objeto = new ArrayList();
         String cond = (!domsAtr.isEmpty()) ? " WHERE " : "";
-        String sql = "SELECT * FROM " + relacion + cond;
+//        String sql = "SELECT * FROM " + relacion + cond;
         int count = 0;
 
         for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
@@ -108,13 +108,16 @@ public class Coneccion {
                 LocalDate fechaActual = LocalDate.now();
                 cond += domAtr.getKey() + " BETWEEN " + domAtr.getValue() + " AND '" + fechaActual + "'";
             }
-            else cond += domAtr.getKey() + " = " + domAtr.getValue();
+            else 
+            {
+                cond += domAtr.getKey() + " = " + domAtr.getValue();
+            }
             
             if (domsAtr.size() > 1 & count != domsAtr.size()-1) cond += " AND ";
             
             count++;
         }
-        
+        String sql = "SELECT * FROM " + relacion + cond;
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
@@ -179,7 +182,7 @@ public class Coneccion {
     
     public void eliminarDato(String relacion, String ID) {
         String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
-        
+        System.out.println(sql);
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
@@ -188,7 +191,6 @@ public class Coneccion {
             {
                 JOptionPane.showMessageDialog(null, "Valor Eliminado.");
             }
-            else JOptionPane.showMessageDialog(null, "Valor Eliminado????.");
         } 
         catch (SQLException ex) 
         {
