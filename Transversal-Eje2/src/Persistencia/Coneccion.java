@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,18 +95,11 @@ public class Coneccion {
         }
     }
     
-    /**
-     * Crear un objeto con los valores recuperados de la BDD para luego insertarlo en un array del metodo y devolverlo a la vista.
-     * 
-     * @param relacion
-     * @param domsAtr 
-     */
-    public void buscarDato(String relacion, HashMap<String, String> domsAtr) {
-        String sql = "Consulta SQL";
-        String cond = "";
+    public ArrayList<Object> buscarDato(String relacion, HashMap<String, String> domsAtr) {
+        ArrayList<Object> objeto = new ArrayList();
+        String cond = (!domsAtr.isEmpty()) ? " WHERE " : "";
+        String sql = "SELECT * FROM " + relacion + cond;
         int count = 0;
-        
-        if(!domsAtr.isEmpty()) cond = " WHERE ";
 
         for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
         {
@@ -120,7 +114,7 @@ public class Coneccion {
             
             count++;
         }
-        sql = "SELECT * FROM " + relacion + cond;
+        
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
@@ -128,21 +122,31 @@ public class Coneccion {
             
             while (resultado.next()) 
             {
-                System.out.println("\nID Alumno: " + resultado.getInt("idAlumno"));
-                System.out.println("DNI: " + resultado.getInt("dni"));
-                System.out.println("Apellido: " + resultado.getString("apellido"));
-                System.out.println("Nombre: " + resultado.getString("nombre"));
-                System.out.println("Fecha de Nacimiento: " + resultado.getDate("fechaNacimiento"));
-                System.out.println("Estado: " + resultado.getBoolean("estado"));
+                switch (relacion) {
+                    case "`alumno`" -> {
+                        Alumno alumno = new Alumno();
+                        alumno.setIDalumno(resultado.getInt("idAlumno"));
+                        alumno.setDni(resultado.getInt("dni"));
+                        alumno.setApellido(resultado.getString("apellido"));
+                        alumno.setNombre(resultado.getString("nombre"));
+                        alumno.setFechaNacimiento(LocalDate.parse(resultado.getString("fechaNacimiento")));
+                        alumno.setEstado(resultado.getBoolean("estado"));
+                        System.out.println(alumno.toString());
+                        
+                        objeto.add(alumno);
+                    }
+                    case "`materia`" -> { Materia materia = new Materia(); }
+                    case "`inscripcion`" -> { Inscripcion inscripcion = new Inscripcion(); }
+                }
             }
         } 
         catch (SQLException ex) 
         {
             JOptionPane.showMessageDialog(null, "No se han encontrado resultados para la busqueda.");
         }
+        return objeto;
     }
     
-    /*``*/
     public void actualizarDato(String relacion, String ID, HashMap<String, String> domsAtr) {
         String sql = "UPDATE " + relacion + " SET ";
         int count = 0;
@@ -170,6 +174,25 @@ public class Coneccion {
         catch (SQLException ex) 
         {
             JOptionPane.showMessageDialog(null, "Error en la Sintaxis.");
+        }
+    }
+    
+    public void eliminarDato(String relacion, String ID) {
+        String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
+        
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            int filas = sentencia.executeUpdate();
+            if (filas > 0)
+            {
+                JOptionPane.showMessageDialog(null, "Valor Eliminado.");
+            }
+            else JOptionPane.showMessageDialog(null, "Valor Eliminado????.");
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "Valor ingresado incorrecto.");
         }
     }
     

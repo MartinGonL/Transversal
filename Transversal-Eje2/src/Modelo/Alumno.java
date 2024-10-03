@@ -115,7 +115,7 @@ public class Alumno {
 
     @Override
     public String toString() {
-        return "Alumno: \nDni: " + dni + ". Nombre: " + nombre + ". Apellido: " + apellido + ". Fecha de Nacimiento: " + fechaNacimiento + ".Estado: " + estado + ". ID Alumno: " + IDalumno + ".";
+        return "Alumno: \nDni: " + dni + ". Nombre: " + nombre + ". Apellido: " + apellido + ". Fecha de Nacimiento: " + fechaNacimiento + ". Estado: " + estado + ". ID Alumno: " + IDalumno + ".";
     }
     
 }

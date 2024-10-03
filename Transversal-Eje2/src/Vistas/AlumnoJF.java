@@ -6,6 +6,8 @@ import Persistencia.Coneccion;
 import java.awt.Color;
 import java.awt.Component;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -15,6 +17,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
     Coneccion coneccion;
     private final String ALUMNO;
+    private final ArrayList<Object> alumnos = new ArrayList();
     private int FLAG;
     /**
      * Variable temporal.
@@ -284,22 +287,28 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
     private void crearJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearJBActionPerformed
         boolean flag = Check.checkField(contenedorJP);
-
-        if (flag) 
+        try 
         {
-            int dni = Integer.parseInt(dniJTF.getText());
-            String nombre = nombreJTF.getText();
-            String apellido = apellidoJTF.getText();
-            LocalDate fecha = LocalDate.parse(fechaJTF.getText());
-            boolean estado = activJChB.isSelected();
+            if (flag) 
+            {
+                int dni = Integer.parseInt(dniJTF.getText());
+                String nombre = nombreJTF.getText();
+                String apellido = apellidoJTF.getText();
+                LocalDate fecha = LocalDate.parse(fechaJTF.getText());
+                boolean estado = activJChB.isSelected();
 
-            Alumno alumno = new Alumno(dni, nombre, apellido, fecha, estado);
-            coneccion.cargarDato(alumno);
-            Check.cleanField(contenedorJP);
+                Alumno alumno = new Alumno(dni, nombre, apellido, fecha, estado);
+                coneccion.cargarDato(alumno);
+                Check.cleanField(contenedorJP);
+            } 
+            else 
+            {
+                JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
+            }
         } 
-        else 
+        catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
+            JOptionPane.showMessageDialog(rootPane, "Fecha incorrecta.");
         }
     }//GEN-LAST:event_crearJBActionPerformed
 
@@ -320,7 +329,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         {
             HashMap<String, String> domsAtr = new HashMap();
         
-            for (Component componente : contenedorJP.getComponents()) 
+            for (Component componente : contenedorJP.getComponents())
             {
                 switch (componente) 
                 {
@@ -363,8 +372,12 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             domsAtr.put("`estado`", "false");
             
             int confirm = JOptionPane.showConfirmDialog(rootPane, "Seguro que desea realizar la baja?");
-            if (confirm == 0) coneccion.actualizarDato(ALUMNO, ID, domsAtr);
-            else JOptionPane.showConfirmDialog(rootPane, "Operacion cancelada.");
+            if (confirm == 0) 
+            {
+                coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+                JOptionPane.showMessageDialog(rootPane, "Operacion Realizada.");
+            }
+            else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
             
             deleteJBActionPerformed(evt);
         }
@@ -376,6 +389,29 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         try 
         {
             if (FLAG != 0) throw new NumberFormatException();
+            
+            buscarJBActionPerformed(evt);
+            dniJL.setText("ID:");
+            dniJTF.setBackground(new Color(0,102,0));
+            dniJTF.setForeground(new Color(255,255,255));
+            buscarJB.setBackground(new Color(0,102,0));
+            deleteJB.setText("Cancelar");
+            
+            FLAG = 4;
+            buscarJBActionPerformed(evt);
+            
+            HashMap<String, String> domsAtr = new HashMap();
+            domsAtr.put("`idAlumno`", ID);
+            
+            int confirm = JOptionPane.showConfirmDialog(rootPane, "Eliminar alumno?");
+            if (confirm == 0) 
+            {
+                //coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+                JOptionPane.showMessageDialog(rootPane, "Operacion Realizada.");
+            }
+            else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
+            
+            deleteJBActionPerformed(evt);
         }
         catch (NumberFormatException ex) 
         {
@@ -463,7 +499,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         }
         finally 
         {
-            coneccion.buscarDato(ALUMNO, domsAtr);
+            alumnos.addAll(coneccion.buscarDato(ALUMNO, domsAtr));
             Check.cleanField(contenedorJP);
         }
     }//GEN-LAST:event_buscarJBActionPerformed
