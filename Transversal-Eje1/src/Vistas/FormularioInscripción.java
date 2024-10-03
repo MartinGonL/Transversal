@@ -4,6 +4,8 @@
  */
 package Vistas;
 
+import Modelo.Alumno;
+
 /**
  *
  * @author santi
