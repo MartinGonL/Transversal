@@ -5,9 +5,9 @@ import Persistencia.Check;
 import Persistencia.Coneccion;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -16,12 +16,10 @@ import javax.swing.JTextField;
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
     Coneccion coneccion;
+    /*Usar coleccion para completar tablas*/
     private final String ALUMNO;
     private final ArrayList<Object> alumnos = new ArrayList();
     private int FLAG;
-    /**
-     * Variable temporal.
-     */
     private String ID;
     
     public AlumnoJF() {
@@ -306,7 +304,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
             }
         } 
-        catch (Exception ex)
+        catch (HeadlessException | NumberFormatException ex)
         {
             JOptionPane.showMessageDialog(rootPane, "Fecha incorrecta.");
         }
@@ -388,30 +386,32 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     private void deleteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJBActionPerformed
         try 
         {
-            if (FLAG != 0) throw new NumberFormatException();
-            
-            buscarJBActionPerformed(evt);
-            dniJL.setText("ID:");
-            dniJTF.setBackground(new Color(0,102,0));
-            dniJTF.setForeground(new Color(255,255,255));
-            buscarJB.setBackground(new Color(0,102,0));
-            deleteJB.setText("Cancelar");
-            
-            FLAG = 4;
-            buscarJBActionPerformed(evt);
-            
-            HashMap<String, String> domsAtr = new HashMap();
-            domsAtr.put("`idAlumno`", ID);
-            
-            int confirm = JOptionPane.showConfirmDialog(rootPane, "Eliminar alumno?");
-            if (confirm == 0) 
+            if (FLAG != 0 & FLAG != 4) throw new NumberFormatException();
+           
+            if (FLAG == 0) 
             {
-                //coneccion.actualizarDato(ALUMNO, ID, domsAtr);
-                JOptionPane.showMessageDialog(rootPane, "Operacion Realizada.");
+                buscarJBActionPerformed(evt);
+                dniJL.setText("ID:");
+                dniJTF.setBackground(new Color(0,102,0));
+                dniJTF.setForeground(new Color(255,255,255));
+                buscarJB.setBackground(new Color(0,102,0));
+                crearJB.setEnabled(false);
+                actualizarJB.setEnabled(false);
+                desJB.setEnabled(false);
+
+                FLAG = 4;
+            } 
+            else 
+            {
+                int confirm = JOptionPane.showConfirmDialog(rootPane, "Eliminar alumno?" );
+                if (confirm == 0) 
+                {
+                    coneccion.eliminarDato(ALUMNO, ID);
+                }
+                else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
+                
+                throw new NumberFormatException();
             }
-            else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
-            
-            deleteJBActionPerformed(evt);
         }
         catch (NumberFormatException ex) 
         {
@@ -426,10 +426,9 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             crearJB.setEnabled(true);
             actualizarJB.setEnabled(true);
             buscarJB.setEnabled(true);
-            
+
             FLAG = 0;
         }
-        finally {}
     }//GEN-LAST:event_deleteJBActionPerformed
 
     private void buscarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarJBActionPerformed
@@ -501,6 +500,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         {
             alumnos.addAll(coneccion.buscarDato(ALUMNO, domsAtr));
             Check.cleanField(contenedorJP);
+            if (FLAG == 4) deleteJBActionPerformed(evt);
         }
     }//GEN-LAST:event_buscarJBActionPerformed
 
