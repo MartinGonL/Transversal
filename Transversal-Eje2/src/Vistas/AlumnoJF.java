@@ -2,7 +2,7 @@ package Vistas;
 
 import Modelo.Alumno;
 import Persistencia.Check;
-import Persistencia.Coneccion;
+import Persistencia.AlumnoData;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.HeadlessException;
@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
-    Coneccion coneccion;
+    AlumnoData coneccion;
     /*Usar coleccion para completar tablas*/
     private final String ALUMNO;
     private final ArrayList<Object> alumnos = new ArrayList();
@@ -24,12 +24,11 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     
     public AlumnoJF() {
         initComponents();
-        this.coneccion = new Coneccion();
+        this.coneccion = new AlumnoData();
         this.FLAG = 0;
         this.ID = "";
         this.ALUMNO = "`alumno`";
         
-        coneccion.conectar();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

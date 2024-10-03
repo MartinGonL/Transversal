@@ -2,16 +2,16 @@ package Vistas;
 
 import Modelo.Materia;
 import Persistencia.Check;
-import Persistencia.Coneccion;
+import Persistencia.AlumnoData;
 import javax.swing.JOptionPane;
 
 public class MateriaJF extends javax.swing.JInternalFrame {
 
-    Coneccion coneccion;
+    AlumnoData coneccion;
     
     public MateriaJF() {
         initComponents();
-        this.coneccion = new Coneccion();
+        this.coneccion = new AlumnoData();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

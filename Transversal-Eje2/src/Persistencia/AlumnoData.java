@@ -1,88 +1,193 @@
 package Persistencia;
 
-import java.sql.Connection; 
+import Modelo.Alumno;
+import Modelo.Inscripcion;
+import Modelo.Materia;
+
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
 public class AlumnoData {
     
-    public void conectar() {
+    private Connection coneccion;
+    private PreparedStatement sentencia;
+    private ResultSet resultado;
+    
+    public AlumnoData() {
+        coneccion = Conexion.getConexion();
+    }
+    
+    public void cargarDato(Object objeto) {
+        String relacion = "relacion";
+        String atributos = "atributos";
+        String doms = "dominios";
         
-        try {
+        switch (objeto) {
+            case Alumno a -> 
+            {
+                relacion = "`alumno` ";
+                atributos = "(`dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado`) ";
+                doms = "(" + a.getDni() + ", '" + a.getApellido() + "', '" + a.getNombre() + "', '" + a.getFechaNacimiento() + "', " + a.isEstado() + ")";
+            }
+            case Materia b -> 
+            {
+                relacion = "`materia` ";
+                atributos = "(`nombre_materia`, `año`, `estado`) ";
+                doms = "('" + b.getNombre() + "', '" + b.getAño() + "', " + b.isEstado() + ")";
+            }
             /**
-             * Creamos una instancia de 'DriverManager' mediante el comando 'Class.forName()'
-             * como parametro le asignamos en nombre del manejador JDBC que utilizaremos. En este
-             * caso 'org.mariadb.jdbc.Driver'.
-             * 
-             * Creamos la coneccion:
+             * Editar esta parte.
              */
-            Class.forName("org.mariadb.jdbc.Driver");
-            
-            /**
-             * El primer parametro debe ser cargado tal cual se ve.
-             * Se puede cambiar 'mysql' por 'maraidb'.
-             * Tambien podriamos cambiar el valor 'localhost' por el IP 
-             * o el nombre del host que contenga la BDD si el trabajo se 
-             * estuviera realizando en 2 PC.
-             * Y seguido de 'localhost/' se debera declarar el nombre de la BDD.
-             * 
-             * Establecemos una coneccion a la base de datos:
-             */
-            Connection line = DriverManager.getConnection("jdbc:mysql://localhost/universidadulp", "root", ""); // --> Si la coneccion no logra establecerce 
-                                                                                                                //     saltara directametne al catch.
-            /**
-             * Establecer VALUES.
-             */
-            String sql = """
-                         INSERT INTO `alumno` (`dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado`) 
-                         VALUES (0000, 'value-2', 'value-3', '2024-01-01', 0 )
-                         """;
-            
-            //Enviar sentencia SQL:
-            PreparedStatement ps = line.prepareStatement(sql);
+            case Inscripcion c -> 
+            {
+                relacion = "`inscripcion` ";
+                atributos = "(`nota`, `idAlumno`, `idMateria`, `recursante`) ";
+                doms = "(" + c.getNota() + ", " + c.getIDalumno() + ", " + c.getIDmateria() + ", " + c.isRecursante() + ")";
+            }
+            default -> {}
+        }
+        
+        String sql = "INSERT INTO " + relacion + atributos + "VALUES " + doms;
+        
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            int filas = sentencia.executeUpdate();
+            if (filas > 0) 
+            {
+                JOptionPane.showInternalMessageDialog(null, "Dato cargado con exito.");
+            }
+        }
+        catch (SQLException ex) 
+        {
+            JOptionPane.showInternalMessageDialog(null, "Falla en la Sintaxis.");
+        }
+    }
+    
+    public ArrayList<Object> buscarDato(String relacion, HashMap<String, String> domsAtr) {
+        ArrayList<Object> objeto = new ArrayList();
+        String cond = (!domsAtr.isEmpty()) ? " WHERE " : "";
+//        String sql = "SELECT * FROM " + relacion + cond;
+        int count = 0;
 
-            //Verificar si la orden fue recibida:
-            int filas = ps.executeUpdate();
-            if (filas > 0) JOptionPane.showMessageDialog(null, "Valor Cargado Exitosamente.");
+        for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
+        {
+            if (domAtr.getKey().equals("`fechaNacimiento`")) 
+            {
+                LocalDate fechaActual = LocalDate.now();
+                cond += domAtr.getKey() + " BETWEEN " + domAtr.getValue() + " AND '" + fechaActual + "'";
+            }
+            else 
+            {
+                cond += domAtr.getKey() + " = " + domAtr.getValue();
+            }
             
-            /**
-             * Ejecutar un select...
-             */
-//            Object[] datos = new Object[6];
+            if (domsAtr.size() > 1 & count != domsAtr.size()-1) cond += " AND ";
             
-//            String select = """
-//                         SELECT `idAlumno`, `dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado` 
-//                         FROM `alumno`
-//                         """;
-
-//            PreparedStatement ps1 = line.prepareStatement(select);
-
-//            ResultSet resultado = ps.executeQuery(sql);
+            count++;
+        }
+        String sql = "SELECT * FROM " + relacion + cond;
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            resultado = sentencia.executeQuery();
             
-//            while (resultado.next()) {
-//                datos[0] = resultado.getInt("idAlumno");
-//                datos[1] = resultado.getInt("dni");
-//                datos[2] = resultado.getString("apellido");
-//                datos[3] = resultado.getString("nombre");
-//                datos[4] = resultado.getDate("fechaNacimiento");
-//                datos[5] = resultado.getBoolean("estado");
-//            }
-//            
-//            for (Object dato : datos) {
-//                System.out.println(dato.toString());
-//            }
-
-        }catch (ClassNotFoundException ex) {
+            while (resultado.next()) 
+            {
+                switch (relacion) {
+                    case "`alumno`" -> {
+                        Alumno alumno = new Alumno();
+                        alumno.setIDalumno(resultado.getInt("idAlumno"));
+                        alumno.setDni(resultado.getInt("dni"));
+                        alumno.setApellido(resultado.getString("apellido"));
+                        alumno.setNombre(resultado.getString("nombre"));
+                        alumno.setFechaNacimiento(LocalDate.parse(resultado.getString("fechaNacimiento")));
+                        alumno.setEstado(resultado.getBoolean("estado"));
+                        System.out.println(alumno.toString());
+                        
+                        objeto.add(alumno);
+                    }
+                    case "`materia`" -> { Materia materia = new Materia(); }
+                    case "`inscripcion`" -> { Inscripcion inscripcion = new Inscripcion(); }
+                }
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "No se han encontrado resultados para la busqueda.");
+        }
+        return objeto;
+    }
+    
+    public void actualizarDato(String relacion, String ID, HashMap<String, String> domsAtr) {
+        String sql = "UPDATE " + relacion + " SET ";
+        int count = 0;
+        
+        for (Map.Entry<String, String> domAtr : domsAtr.entrySet()) 
+        {
+            sql += domAtr.getKey() + " = " + domAtr.getValue();
             
-            JOptionPane.showMessageDialog(null, "Falla en los Drivers.");
+            if (domsAtr.size() > 1 & count != domsAtr.size()-1) sql += ", ";
             
-        }catch (SQLException ex) {
-            
-            JOptionPane.showMessageDialog(null, "Falla en la Coneccion.");
-            
+            count++;
+        }
+        
+        sql += " WHERE `idAlumno` = " + ID;
+        
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            int filas = sentencia.executeUpdate();
+            if (filas > 0) 
+            {
+                JOptionPane.showMessageDialog(null, "Cambios Guardados.");
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "Error en la Sintaxis.");
+        }
+    }
+    
+    public void eliminarDato(String relacion, String ID) {
+        String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
+        System.out.println(sql);
+        try 
+        {
+            sentencia = coneccion.prepareStatement(sql);
+            int filas = sentencia.executeUpdate();
+            if (filas > 0)
+            {
+                JOptionPane.showMessageDialog(null, "Valor Eliminado.");
+            }
+        } 
+        catch (SQLException ex) 
+        {
+            JOptionPane.showMessageDialog(null, "Valor ingresado incorrecto.");
+        }
+    }
+    
+    public void desconectar () {
+        try 
+        {
+            coneccion.close();    
+            JOptionPane.showInternalMessageDialog(null, "La coneccion a sido finalizada.");
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(AlumnoData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
