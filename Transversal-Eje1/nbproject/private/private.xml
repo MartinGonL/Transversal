@@ -3,9 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/santi/OneDrive/Documentos/GitHub/Transversal/Transversal-Eje1/src/Vistas/GUI_asd.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documentos/GitHub/Transversal/Transversal-Eje1/src/Vistas/FormularioAlumno.java</file>
-            <file>file:/C:/Users/santi/OneDrive/Documentos/GitHub/Transversal/Transversal-Eje1/src/Vistas/Menu.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documentos/GitHub/Transversal/Transversal-Eje1/src/Vistas/FormularioInscripción.java</file>
+            <file>file:/C:/Users/santi/OneDrive/Documentos/GitHub/Transversal/Transversal-Eje1/src/Persistencia/AlumnoData.java</file>
         </group>
     </open-files>
 </project-private>
