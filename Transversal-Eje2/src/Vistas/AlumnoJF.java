@@ -1,10 +1,11 @@
 package Vistas;
 
 import Modelo.Alumno;
+import Persistencia.AlumnoData;
 import Persistencia.Funciones;
-import Persistencia.Coneccion;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.HeadlessException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,21 +15,22 @@ import javax.swing.JTextField;
 
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
-    private final Coneccion coneccion;
+    private final AlumnoData funcion;
     private final String ALUMNO;
     private final ArrayList<Object> alumnos = new ArrayList();
     private int FLAG;
-    private String ID;
+    private final String ID;
+    private String DOM;
     
     public AlumnoJF() {
         initComponents();
-        this.coneccion = new Coneccion();
-        this.FLAG = 0;
-        this.ID = "";
+        this.funcion = new AlumnoData();
         this.ALUMNO = "`alumno`";
+        this.FLAG = 0;
+        this.ID = "`idAlumno`";
+        this.DOM = "";
         
-        coneccion.conectar();
-        
+        funcion.conectar();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -295,7 +297,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 boolean estado = activJChB.isSelected();
 
                 Alumno alumno = new Alumno(dni, nombre, apellido, fecha, estado);
-                coneccion.cargarDato(alumno);
+                funcion.cargarDato(alumno);
                 activJChB.setSelected(false);
                 Funciones.cleanField(contenedorJP);
                 
@@ -306,7 +308,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
             }
         } 
-        catch (Exception ex)
+        catch (HeadlessException | NumberFormatException ex)
         {
             JOptionPane.showMessageDialog(rootPane, "Fecha incorrecta.");
         }
@@ -361,7 +363,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             }
             deleteJBActionPerformed(evt);
             activJChB.setSelected(false);
-            coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+            funcion.actualizarDato(ALUMNO, ID, DOM, domsAtr);
             buscarJBActionPerformed(evt);
         }
     }//GEN-LAST:event_actualizarJBActionPerformed
@@ -389,7 +391,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             int confirm = JOptionPane.showConfirmDialog(rootPane, "Seguro que desea realizar la baja?");
             if (confirm == 0) 
             {
-                coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+                funcion.actualizarDato(ALUMNO, ID, DOM, domsAtr);
             }
             else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
             
@@ -422,7 +424,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 int confirm = JOptionPane.showConfirmDialog(rootPane, "Eliminar alumno?" );
                 if (confirm == 0) 
                 {
-                    coneccion.eliminarDato(ALUMNO, ID);
+                    funcion.eliminarDato(ALUMNO, DOM);
                 }
                 else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
                 throw new NumberFormatException();
@@ -485,8 +487,8 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         }
         catch (NumberFormatException ex) 
         {
-            ID = dniJTF.getText();
-            domsAtr.put("`idAlumno`", ID);
+            DOM = dniJTF.getText();
+            domsAtr.put("`idAlumno`", DOM);
             
             switch (FLAG) {
                 case 1 -> {
@@ -515,7 +517,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         }
         finally 
         {
-            alumnos.addAll(coneccion.buscarDato(ALUMNO, domsAtr));
+            alumnos.addAll(funcion.buscarDato(ALUMNO, domsAtr));
             Funciones.cleanField(contenedorJP);
             
             InicioJDP.resetTable();

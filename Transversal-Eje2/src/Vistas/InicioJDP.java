@@ -1,6 +1,7 @@
 package Vistas;
 
 import Modelo.Alumno;
+import Modelo.Materia;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -17,7 +18,7 @@ public class InicioJDP extends javax.swing.JFrame {
         initComponents();
         
         setLocationRelativeTo(null);
-        setColum();
+//        setColum();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -82,7 +83,7 @@ public class InicioJDP extends javax.swing.JFrame {
 
         alumnoJM.setText("Alumno");
 
-        alumnoJMItem.setText("Agregar");
+        alumnoJMItem.setText("Administrar");
         alumnoJMItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 alumnoJMItemActionPerformed(evt);
@@ -94,7 +95,7 @@ public class InicioJDP extends javax.swing.JFrame {
 
         materiaJM.setText("Materia");
 
-        materiaJMItem.setText("Agregar");
+        materiaJMItem.setText("Administrar");
         materiaJMItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 materiaJMItemActionPerformed(evt);
@@ -148,6 +149,8 @@ public class InicioJDP extends javax.swing.JFrame {
         
         escritorioDP.add(alumnoFrame);
         escritorioDP.moveToFront(alumnoFrame);
+        
+        setColum(alumnoFrame);
     }//GEN-LAST:event_alumnoJMItemActionPerformed
 
     private void materiaJMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_materiaJMItemActionPerformed
@@ -159,6 +162,8 @@ public class InicioJDP extends javax.swing.JFrame {
         
         escritorioDP.add(materiaFrame);
         escritorioDP.moveToFront(materiaFrame);
+        
+        setColum(materiaFrame);
     }//GEN-LAST:event_materiaJMItemActionPerformed
 
     private void inscribirJMItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inscribirJMItemActionPerformed
@@ -172,27 +177,40 @@ public class InicioJDP extends javax.swing.JFrame {
         escritorioDP.moveToFront(inscripcionFrame);
     }//GEN-LAST:event_inscribirJMItemActionPerformed
     
-    private void setColum() {
+    private void setColum(Object objeto) {
         mTabla = new DefaultTableModel() {
             public boolean celdaEditable(int fila, int col) {
                 
                 return false;
             }
         };
+        
+        if (objeto instanceof AlumnoJF) 
+        {
+            mTabla.addColumn("ID");
+            mTabla.addColumn("Nombre");
+            mTabla.addColumn("Apellido");
+            mTabla.addColumn("DNI");
+            mTabla.addColumn("F. Nacimiento");
+            mTabla.addColumn("Activo");
 
-        mTabla.addColumn("ID");
-        mTabla.addColumn("Nombre");
-        mTabla.addColumn("Apellido");
-        mTabla.addColumn("DNI");
-        mTabla.addColumn("F. Nacimiento");
-        mTabla.addColumn("Activo");
-
-        tablaJT.setModel(mTabla);
+            tablaJT.setModel(mTabla);
+        }
+        else if (objeto instanceof MateriaJF) 
+        {
+            mTabla.addColumn("ID");
+            mTabla.addColumn("Materia");
+            mTabla.addColumn("Año");
+            mTabla.addColumn("Activo");
+            
+            tablaJT.setModel(mTabla);
+        }
     }
     
     public static void setRow(ArrayList<Object> objetos) {
         for (Object objeto : objetos) {
-            if (objeto instanceof Alumno a) {
+            if (objeto instanceof Alumno a) 
+            {
                 mTabla.addRow(new Object[]{
                     a.getIDalumno(),
                     a.getNombre(),
@@ -200,6 +218,15 @@ public class InicioJDP extends javax.swing.JFrame {
                     a.getDni(),
                     a.getFechaNacimiento(),
                     a.isEstado(),
+                });
+            }
+            else if (objeto instanceof Materia b) 
+            {
+                mTabla.addRow(new Object[]{
+                    b.getIDmateria(),
+                    b.getNombre(),
+                    b.getAño(),
+                    b.isEstado(),
                 });
             }
         }

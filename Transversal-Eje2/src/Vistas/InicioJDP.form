@@ -33,7 +33,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="alumnoJMItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Agregar"/>
+                <Property name="text" type="java.lang.String" value="Administrar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="alumnoJMItemActionPerformed"/>
@@ -48,7 +48,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="materiaJMItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Agregar"/>
+                <Property name="text" type="java.lang.String" value="Administrar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="materiaJMItemActionPerformed"/>

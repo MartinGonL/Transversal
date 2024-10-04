@@ -4,8 +4,8 @@ import Modelo.Alumno;
 import Modelo.Inscripcion;
 import Modelo.Materia;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,32 +19,29 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-public class Coneccion {
+public class AlumnoData {
     
-    private Connection coneccion;
+    private Connection conexion;
     private PreparedStatement sentencia;
     private ResultSet resultado;
-    
-    public Coneccion() {
-        try 
-        {
+
+    public AlumnoData() {
+        try {
             Class.forName("org.mariadb.jdbc.Driver");
-        } 
-        catch (ClassNotFoundException ex) 
-        {
-            JOptionPane.showInternalMessageDialog(null, "Error al cargar los Drivers.");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AlumnoData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void conectar() {
         try 
-        {   
-            coneccion = DriverManager.getConnection("jdbc:mysql://localhost/universidadulp", "root", "");
+        {
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost/universidadulp", "root", "");
             JOptionPane.showInternalMessageDialog(null, "Coneccion Exitosa.");
-        }
+        } 
         catch (SQLException ex) 
-        {    
-            JOptionPane.showInternalMessageDialog(null, "Error al establecer la Coneccion.");
+        {
+            JOptionPane.showInternalMessageDialog(null, "Falla en la Conexion.");
         }
     }
     
@@ -79,7 +76,7 @@ public class Coneccion {
         
         try 
         {
-            sentencia = coneccion.prepareStatement(sql);
+            sentencia = conexion.prepareStatement(sql);
             int filas = sentencia.executeUpdate();
             if (filas > 0) 
             {
@@ -113,10 +110,12 @@ public class Coneccion {
             
             count++;
         }
+        
         String sql = "SELECT * FROM " + relacion + cond;
+        
         try 
         {
-            sentencia = coneccion.prepareStatement(sql);
+            sentencia = conexion.prepareStatement(sql);
             resultado = sentencia.executeQuery();
             
             while (resultado.next()) 
@@ -133,7 +132,15 @@ public class Coneccion {
                         
                         objeto.add(alumno);
                     }
-                    case "`materia`" -> { Materia materia = new Materia(); }
+                    case "`materia`" -> { 
+                        Materia materia = new Materia();
+                        materia.setIDmateria(resultado.getInt("idMateria"));
+                        materia.setNombre(resultado.getString("nombre_materia"));
+                        materia.setAño(resultado.getInt("año"));
+                        materia.setEstado(resultado.getBoolean("estado"));
+                        
+                        objeto.add(materia);
+                    }
                     case "`inscripcion`" -> { Inscripcion inscripcion = new Inscripcion(); }
                 }
             }
@@ -145,7 +152,7 @@ public class Coneccion {
         return objeto;
     }
     
-    public void actualizarDato(String relacion, String ID, HashMap<String, String> domsAtr) {
+    public void actualizarDato(String relacion, String id, String dom, HashMap<String, String> domsAtr) {
         String sql = "UPDATE " + relacion + " SET ";
         int count = 0;
         
@@ -158,11 +165,11 @@ public class Coneccion {
             count++;
         }
         
-        sql += " WHERE `idAlumno` = " + ID;
+        sql += " WHERE " + id + " = " + dom;
         
         try 
         {
-            sentencia = coneccion.prepareStatement(sql);
+            sentencia = conexion.prepareStatement(sql);
             int filas = sentencia.executeUpdate();
             if (filas > 0) 
             {
@@ -179,7 +186,7 @@ public class Coneccion {
         String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
         try 
         {
-            sentencia = coneccion.prepareStatement(sql);
+            sentencia = conexion.prepareStatement(sql);
             int filas = sentencia.executeUpdate();
             if (filas > 0)
             {
@@ -195,12 +202,12 @@ public class Coneccion {
     public void desconectar () {
         try 
         {
-            coneccion.close();    
+            conexion.close();    
             JOptionPane.showInternalMessageDialog(null, "La coneccion a sido finalizada.");
         } 
         catch (SQLException ex) 
         {
-            Logger.getLogger(Coneccion.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlumnoData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
