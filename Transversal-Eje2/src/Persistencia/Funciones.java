@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 /**
  * @author Ignacio
  */
-public class Check {
+public class Funciones {
 
     /**
      * true: Campos llenos. 

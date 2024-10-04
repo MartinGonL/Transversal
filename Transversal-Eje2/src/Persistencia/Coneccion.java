@@ -53,29 +53,26 @@ public class Coneccion {
         String atributos = "atributos";
         String doms = "dominios";
         
-        switch (objeto) {
-            case Alumno a -> 
-            {
-                relacion = "`alumno` ";
-                atributos = "(`dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado`) ";
-                doms = "(" + a.getDni() + ", '" + a.getApellido() + "', '" + a.getNombre() + "', '" + a.getFechaNacimiento() + "', " + a.isEstado() + ")";
-            }
-            case Materia b -> 
-            {
-                relacion = "`materia` ";
-                atributos = "(`nombre_materia`, `año`, `estado`) ";
-                doms = "('" + b.getNombre() + "', '" + b.getAño() + "', " + b.isEstado() + ")";
-            }
-            /**
-             * Editar esta parte.
-             */
-            case Inscripcion c -> 
-            {
-                relacion = "`inscripcion` ";
-                atributos = "(`nota`, `idAlumno`, `idMateria`, `recursante`) ";
-                doms = "(" + c.getNota() + ", " + c.getIDalumno() + ", " + c.getIDmateria() + ", " + c.isRecursante() + ")";
-            }
-            default -> {}
+        if (objeto instanceof Alumno a) 
+        {
+            relacion = "`alumno` ";
+            atributos = "(`dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado`) ";
+            doms = "(" + a.getDni() + ", '" + a.getApellido() + "', '" + a.getNombre() + "', '" + a.getFechaNacimiento() + "', " + a.isEstado() + ")";
+        }
+        else if (objeto instanceof Materia b) 
+        {
+            relacion = "`materia` ";
+            atributos = "(`nombre_materia`, `año`, `estado`) ";
+            doms = "('" + b.getNombre() + "', '" + b.getAño() + "', " + b.isEstado() + ")";
+        }
+        /**
+        * Editar esta parte.
+        */
+        else if (objeto instanceof Inscripcion c) 
+        {
+            relacion = "`inscripcion` ";
+            atributos = "(`nota`, `idAlumno`, `idMateria`, `recursante`) ";
+            doms = "(" + c.getNota() + ", " + c.getIDalumno() + ", " + c.getIDmateria() + ", " + c.isRecursante() + ")";
         }
         
         String sql = "INSERT INTO " + relacion + atributos + "VALUES " + doms;
@@ -180,7 +177,6 @@ public class Coneccion {
     
     public void eliminarDato(String relacion, String ID) {
         String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
-        System.out.println(sql);
         try 
         {
             sentencia = coneccion.prepareStatement(sql);

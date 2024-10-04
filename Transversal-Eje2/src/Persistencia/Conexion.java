@@ -15,7 +15,6 @@ public class Conexion {
 
     public Conexion() {}
     
-    
     public static Connection getConexion(){
         try 
         {
@@ -32,10 +31,7 @@ public class Conexion {
         return conectar;
     }
     
-    
-    
     public static void insertTras1() {
-        
         try {
             
             
@@ -79,11 +75,7 @@ public class Conexion {
 //                System.out.println(dato.toString());
 //            }
 
-        /**}catch (ClassNotFoundException ex) {
-            
-            JOptionPane.showMessageDialog(null, "Falla en los Drivers.");
-            
-        */}catch (SQLException ex) {
+       }catch (SQLException ex) {
             
             JOptionPane.showMessageDialog(null, "Falla en la Coneccion.");
             

@@ -1,17 +1,10 @@
 package Vistas;
 
-import Modelo.Materia;
-import Persistencia.Check;
-import Persistencia.AlumnoData;
-import javax.swing.JOptionPane;
-
 public class MateriaJF extends javax.swing.JInternalFrame {
 
-    AlumnoData coneccion;
     
     public MateriaJF() {
         initComponents();
-        this.coneccion = new AlumnoData();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -208,22 +201,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void crearJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearJBActionPerformed
-        boolean flag = Check.checkField(contenedorJP);
-
-        if (flag) 
-        {
-            String nombre = nombreJTF.getText();
-            int anio = Integer.parseInt(anioJTF.getText());
-            boolean estado = activJChB.isSelected();
-
-            Materia materia = new Materia(nombre, anio, estado);
-            coneccion.cargarDato(materia);
-            Check.cleanField(contenedorJP);
-        } 
-        else 
-        {
-            JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
-        }
+     
     }//GEN-LAST:event_crearJBActionPerformed
 
     private void actJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actJBActionPerformed

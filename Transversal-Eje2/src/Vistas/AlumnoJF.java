@@ -1,11 +1,10 @@
 package Vistas;
 
 import Modelo.Alumno;
-import Persistencia.Check;
-import Persistencia.AlumnoData;
+import Persistencia.Funciones;
+import Persistencia.Coneccion;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +14,7 @@ import javax.swing.JTextField;
 
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
-//    private final Coneccion coneccion;
-    private final AlumnoData coneccion;
+    private final Coneccion coneccion;
     private final String ALUMNO;
     private final ArrayList<Object> alumnos = new ArrayList();
     private int FLAG;
@@ -24,10 +22,12 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     
     public AlumnoJF() {
         initComponents();
-        this.coneccion = new AlumnoData();
+        this.coneccion = new Coneccion();
         this.FLAG = 0;
         this.ID = "";
         this.ALUMNO = "`alumno`";
+        
+        coneccion.conectar();
         
     }
     
@@ -283,7 +283,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void crearJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearJBActionPerformed
-        boolean flag = Check.checkField(contenedorJP);
+        boolean flag = Funciones.checkField(contenedorJP);
         try 
         {
             if (flag) 
@@ -296,25 +296,28 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
                 Alumno alumno = new Alumno(dni, nombre, apellido, fecha, estado);
                 coneccion.cargarDato(alumno);
-                Check.cleanField(contenedorJP);
+                activJChB.setSelected(false);
+                Funciones.cleanField(contenedorJP);
+                
+                buscarJBActionPerformed(evt);
             } 
             else 
             {
                 JOptionPane.showMessageDialog(rootPane, "Complete los campos requeridos.");
             }
         } 
-        catch (HeadlessException | NumberFormatException ex)
+        catch (Exception ex)
         {
             JOptionPane.showMessageDialog(rootPane, "Fecha incorrecta.");
         }
     }//GEN-LAST:event_crearJBActionPerformed
 
     private void actualizarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarJBActionPerformed
-        if (FLAG == 0 | FLAG == 3) 
+        if (FLAG == 0) 
         {
             buscarJBActionPerformed(evt);
 
-            FLAG = (FLAG == 0) ? 1 : 2;
+            FLAG = 1;
             
             dniJL.setText("ID:");
             dniJTF.setBackground(new Color(0,102,0));
@@ -357,14 +360,26 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 }
             }
             deleteJBActionPerformed(evt);
+            activJChB.setSelected(false);
             coneccion.actualizarDato(ALUMNO, ID, domsAtr);
+            buscarJBActionPerformed(evt);
         }
     }//GEN-LAST:event_actualizarJBActionPerformed
 
     private void desJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desJBActionPerformed
         if (FLAG == 0) {
-            FLAG = 3;
-            actualizarJBActionPerformed(evt);
+            buscarJBActionPerformed(evt);
+            dniJL.setText("ID:");
+            dniJTF.setBackground(new Color(0,102,0));
+            dniJTF.setForeground(new Color(255,255,255));
+            buscarJB.setBackground(new Color(0,102,0));
+            buscarJB.setText("Ok");
+            deleteJB.setText("Cancelar");
+            crearJB.setEnabled(false);
+            actualizarJB.setEnabled(false);
+            desJB.setEnabled(false);
+            
+            FLAG = 2;
         }
         else 
         {
@@ -380,8 +395,6 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             
             deleteJBActionPerformed(evt);
         }
-        
-        
     }//GEN-LAST:event_desJBActionPerformed
 
     private void deleteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJBActionPerformed
@@ -396,11 +409,13 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                 dniJTF.setBackground(new Color(0,102,0));
                 dniJTF.setForeground(new Color(255,255,255));
                 buscarJB.setBackground(new Color(0,102,0));
+                buscarJB.setText("Ok");
+                deleteJB.setText("Cancelar");
                 crearJB.setEnabled(false);
                 actualizarJB.setEnabled(false);
                 desJB.setEnabled(false);
 
-                FLAG = 4;
+                FLAG = 3;
             } 
             else 
             {
@@ -410,17 +425,17 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                     coneccion.eliminarDato(ALUMNO, ID);
                 }
                 else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
-                
                 throw new NumberFormatException();
             }
         }
         catch (NumberFormatException ex) 
         {
-            Check.cleanField(contenedorJP);
-            Check.colorField(contenedorJP, new Color(255,255,255), new Color(0,0,0));
+            Funciones.cleanField(contenedorJP);
+            Funciones.colorField(contenedorJP, new Color(255,255,255), new Color(0,0,0));
             deleteJB.setText("Eliminar");
             dniJL.setText("DNI:");
             buscarJB.setBackground(new Color(255,204,0));
+            buscarJB.setText("Buscar");
             actualizarJB.setText("Actualizar");
             actualizarJB.setBackground(new Color(255,204,0));
             desJB.setEnabled(true);
@@ -438,7 +453,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         
         try 
         {
-            if (FLAG != 0 & FLAG != 3) throw new NumberFormatException();
+            if (FLAG != 0) throw new NumberFormatException();
             
             for (Component componente : contenedorJP.getComponents()) 
             {
@@ -478,7 +493,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                     deleteJBActionPerformed(evt);
                     deleteJB.setText("Cancelar");
 
-                    Check.colorField(contenedorJP, new Color(0, 102, 0), new Color(255,255,255));
+                    Funciones.colorField(contenedorJP, new Color(0, 102, 0), new Color(255,255,255));
                     actualizarJB.setBackground(new Color(0, 102, 0));
                     actualizarJB.setText("Guardar");
                     
@@ -489,23 +504,22 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
                     FLAG = 1;
                 }
                 case 2 -> {
-                    crearJB.setEnabled(false);
-                    actualizarJB.setEnabled(false);
-                    buscarJB.setEnabled(false);
-                    deleteJB.setText("Cancelar");
-
                     desJBActionPerformed(evt);
+                    domsAtr.clear();
+                }
+                case 3 -> {
+                    FLAG = 4;
+                    deleteJBActionPerformed(evt);
                 }
             }
         }
         finally 
         {
             alumnos.addAll(coneccion.buscarDato(ALUMNO, domsAtr));
-            Check.cleanField(contenedorJP);
-            
-            if (FLAG == 4) deleteJBActionPerformed(evt);
+            Funciones.cleanField(contenedorJP);
             
             InicioJDP.resetTable();
+            
             InicioJDP.setRow(alumnos);
         }
     }//GEN-LAST:event_buscarJBActionPerformed
