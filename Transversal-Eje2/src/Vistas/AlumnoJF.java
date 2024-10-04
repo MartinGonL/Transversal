@@ -15,8 +15,8 @@ import javax.swing.JTextField;
 
 public class AlumnoJF extends javax.swing.JInternalFrame {
 
-    AlumnoData coneccion;
-    /*Usar coleccion para completar tablas*/
+//    private final Coneccion coneccion;
+    private final AlumnoData coneccion;
     private final String ALUMNO;
     private final ArrayList<Object> alumnos = new ArrayList();
     private int FLAG;
@@ -321,6 +321,9 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             dniJTF.setForeground(new Color(255,255,255));
             buscarJB.setBackground(new Color(0,102,0));
             deleteJB.setText("Cancelar");
+            crearJB.setEnabled(false);
+            desJB.setEnabled(false);
+            actualizarJB.setEnabled(false);
         }
         else 
         {
@@ -372,7 +375,6 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
             if (confirm == 0) 
             {
                 coneccion.actualizarDato(ALUMNO, ID, domsAtr);
-                JOptionPane.showMessageDialog(rootPane, "Operacion Realizada.");
             }
             else JOptionPane.showMessageDialog(rootPane, "Operacion Cancelada.");
             
@@ -432,6 +434,7 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
 
     private void buscarJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarJBActionPerformed
         HashMap<String, String> domsAtr = new HashMap();
+        alumnos.clear();
         
         try 
         {
@@ -499,10 +502,14 @@ public class AlumnoJF extends javax.swing.JInternalFrame {
         {
             alumnos.addAll(coneccion.buscarDato(ALUMNO, domsAtr));
             Check.cleanField(contenedorJP);
+            
             if (FLAG == 4) deleteJBActionPerformed(evt);
+            
+            InicioJDP.resetTable();
+            InicioJDP.setRow(alumnos);
         }
     }//GEN-LAST:event_buscarJBActionPerformed
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox activJChB;
     private javax.swing.JLabel activoJL;

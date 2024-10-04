@@ -5,6 +5,7 @@ import Modelo.Inscripcion;
 import Modelo.Materia;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,14 +19,33 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-public class AlumnoData {
+public class Coneccion {
     
-    private final Connection coneccion;
+    private Connection coneccion;
     private PreparedStatement sentencia;
     private ResultSet resultado;
     
-    public AlumnoData() {
-        coneccion = Conexion.getConexion();
+    public Coneccion() {
+        try 
+        {
+            Class.forName("org.mariadb.jdbc.Driver");
+        } 
+        catch (ClassNotFoundException ex) 
+        {
+            JOptionPane.showInternalMessageDialog(null, "Error al cargar los Drivers.");
+        }
+    }
+    
+    public void conectar() {
+        try 
+        {   
+            coneccion = DriverManager.getConnection("jdbc:mysql://localhost/universidadulp", "root", "");
+            JOptionPane.showInternalMessageDialog(null, "Coneccion Exitosa.");
+        }
+        catch (SQLException ex) 
+        {    
+            JOptionPane.showInternalMessageDialog(null, "Error al establecer la Coneccion.");
+        }
     }
     
     public void cargarDato(Object objeto) {
@@ -160,6 +180,7 @@ public class AlumnoData {
     
     public void eliminarDato(String relacion, String ID) {
         String sql = "DELETE FROM " + relacion + " WHERE `idAlumno` = " + ID;
+        System.out.println(sql);
         try 
         {
             sentencia = coneccion.prepareStatement(sql);
@@ -183,7 +204,7 @@ public class AlumnoData {
         } 
         catch (SQLException ex) 
         {
-            Logger.getLogger(AlumnoData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Coneccion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

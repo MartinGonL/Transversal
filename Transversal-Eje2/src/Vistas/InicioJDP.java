@@ -1,15 +1,23 @@
 package Vistas;
 
+import Modelo.Alumno;
+import java.util.ArrayList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 public class InicioJDP extends javax.swing.JFrame {
     
     private AlumnoJF alumnoFrame;
     private MateriaJF materiaFrame;
     private InscripcionJF inscripcionFrame;
     
+    private static DefaultTableModel mTabla;
+    
     public InicioJDP() {
         initComponents();
         
         setLocationRelativeTo(null);
+        setColum();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -53,28 +61,6 @@ public class InicioJDP extends javax.swing.JFrame {
             .addGap(0, 350, Short.MAX_VALUE)
         );
 
-        tablaJT.setModel(new javax.swing.table.DefaultTableModel(
-            new String [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "ID", "Nombre", "Apellido", "Recursante", "Asignatura", "ID"
-            }
-        ));
         jScrollPane1.setViewportView(tablaJT);
 
         javax.swing.GroupLayout panelTablaJPLayout = new javax.swing.GroupLayout(panelTablaJP);
@@ -186,31 +172,64 @@ public class InicioJDP extends javax.swing.JFrame {
         escritorioDP.moveToFront(inscripcionFrame);
     }//GEN-LAST:event_inscribirJMItemActionPerformed
     
-    /**
-     *     "ID", "Nombre", "Apellido", "Recursante", "Asignatura", "ID"
-     *  0   0       1           2            3             4        5
-     *  1
-     *  2
-     */
-    public static void llenarTabla(String IDA, String IDM, boolean recursante) {
+    private void setColum() {
+        mTabla = new DefaultTableModel() {
+            public boolean celdaEditable(int fila, int col) {
+                
+                return false;
+            }
+        };
+
+        mTabla.addColumn("ID");
+        mTabla.addColumn("Nombre");
+        mTabla.addColumn("Apellido");
+        mTabla.addColumn("DNI");
+        mTabla.addColumn("F. Nacimiento");
+        mTabla.addColumn("Activo");
+
+        tablaJT.setModel(mTabla);
+    }
+    
+    public static void setRow(ArrayList<Object> objetos) {
+        for (Object objeto : objetos) {
+            if (objeto instanceof Alumno a) {
+                mTabla.addRow(new Object[]{
+                    a.getIDalumno(),
+                    a.getNombre(),
+                    a.getApellido(),
+                    a.getDni(),
+                    a.getFechaNacimiento(),
+                    a.isEstado(),
+                });
+            }
+        }
+
+        tablaJT.setModel(mTabla);
+    }
+    
+    public static void resetTable() {
+        int x = mTabla.getRowCount()-1;
+        
+        for (int c = x; c >= 0; c--) {
+            mTabla.removeRow(c);
+        }
     }
     
     public static void main(String args[]) {
 
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try 
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) 
+            {
+                if ("Nimbus".equals(info.getName())) 
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InicioJDP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InicioJDP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InicioJDP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } 
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) 
+        {
             java.util.logging.Logger.getLogger(InicioJDP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
