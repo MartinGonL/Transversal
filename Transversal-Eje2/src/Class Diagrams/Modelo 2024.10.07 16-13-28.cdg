@@ -2,7 +2,7 @@
 
 <ClassDiagram name="Modelo">
   <ClassDiagramComponents>
-    <Class name="Alumno" package="Modelo" visibility="public" xPosition="20.0" yPosition="20.0">
+    <Class name="Alumno" package="Modelo" visibility="public" xPosition="133.0" yPosition="30.0">
       <Fields>
         <Field name="dni" type="Integer" visibility="private"/>
         <Field name="nombre" type="String" visibility="private"/>
@@ -53,7 +53,7 @@
         <Method name="toString" returnType="String" visibility="public"/>
       </Methods>
     </Class>
-    <Class name="Inscripcion" package="Modelo" visibility="public" xPosition="320.0" yPosition="20.0">
+    <Class name="Inscripcion" package="Modelo" visibility="public" xPosition="894.0" yPosition="30.0">
       <Fields>
         <Field name="IDinscripcion" type="Integer" visibility="private"/>
         <Field name="IDalumno" type="Integer" visibility="private"/>
@@ -98,7 +98,7 @@
         <Method name="toString" returnType="String" visibility="public"/>
       </Methods>
     </Class>
-    <Class name="Materia" package="Modelo" visibility="public" xPosition="620.0" yPosition="20.0">
+    <Class name="Materia" package="Modelo" visibility="public" xPosition="852.0" yPosition="579.0">
       <Fields>
         <Field name="IDmateria" type="Integer" visibility="private"/>
         <Field name="nombre" type="String" visibility="private"/>
@@ -138,5 +138,8 @@
       </Methods>
     </Class>
   </ClassDiagramComponents>
-  <ClassDiagramRelations/>
+  <ClassDiagramRelations>
+    <HasRelation name="InsAl" source="Modelo.Inscripcion" target="Modelo.Alumno" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <HasRelation name="insMat" source="Modelo.Inscripcion" target="Modelo.Materia" type="Default" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+  </ClassDiagramRelations>
 </ClassDiagram>
