@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Modelo">
+  <ClassDiagramComponents>
+    <Class name="Alumno" package="Modelo" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="dni" type="Integer" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="apellido" type="String" visibility="private"/>
+        <Field name="fechaNacimiento" type="LocalDate" visibility="private"/>
+        <Field name="estado" type="boolean" visibility="private"/>
+        <Field name="IDalumno" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Integer" name="dni"/>
+          <Argument type="String" name="nombre"/>
+          <Argument type="String" name="apellido"/>
+          <Argument type="LocalDate" name="fechaNacimiento"/>
+          <Argument type="boolean" name="estado"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getDni" returnType="Integer" visibility="public"/>
+        <Method name="setDni" returnType="void" visibility="public">
+          <Argument type="Integer" name="dni"/>
+        </Method>
+        <Method name="getNombre" returnType="String" visibility="public"/>
+        <Method name="setNombre" returnType="void" visibility="public">
+          <Argument type="String" name="nombre"/>
+        </Method>
+        <Method name="getApellido" returnType="String" visibility="public"/>
+        <Method name="setApellido" returnType="void" visibility="public">
+          <Argument type="String" name="apellido"/>
+        </Method>
+        <Method name="getFechaNacimiento" returnType="LocalDate" visibility="public"/>
+        <Method name="setFechaNacimiento" returnType="void" visibility="public">
+          <Argument type="LocalDate" name="fechaNacimiento"/>
+        </Method>
+        <Method name="isEstado" returnType="boolean" visibility="public"/>
+        <Method name="setEstado" returnType="void" visibility="public">
+          <Argument type="boolean" name="estado"/>
+        </Method>
+        <Method name="getIDalumno" returnType="int" visibility="public"/>
+        <Method name="setIDalumno" returnType="void" visibility="public">
+          <Argument type="int" name="IDalumno"/>
+        </Method>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Inscripcion" package="Modelo" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Fields>
+        <Field name="IDinscripcion" type="Integer" visibility="private"/>
+        <Field name="IDalumno" type="Integer" visibility="private"/>
+        <Field name="IDmateria" type="Integer" visibility="private"/>
+        <Field name="nota" type="Integer" visibility="private"/>
+        <Field name="recursante" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Integer" name="IDalumno"/>
+          <Argument type="Integer" name="IDmateria"/>
+          <Argument type="Integer" name="nota"/>
+          <Argument type="boolean" name="recursante"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getIDinscripcion" returnType="Integer" visibility="public"/>
+        <Method name="setIDinscripcion" returnType="void" visibility="public">
+          <Argument type="Integer" name="IDinscripcion"/>
+        </Method>
+        <Method name="getIDalumno" returnType="Integer" visibility="public"/>
+        <Method name="setIDalumno" returnType="void" visibility="public">
+          <Argument type="Integer" name="IDalumno"/>
+        </Method>
+        <Method name="getIDmateria" returnType="Integer" visibility="public"/>
+        <Method name="setIDmateria" returnType="void" visibility="public">
+          <Argument type="Integer" name="IDmateria"/>
+        </Method>
+        <Method name="getNota" returnType="Integer" visibility="public"/>
+        <Method name="setNota" returnType="void" visibility="public">
+          <Argument type="Integer" name="nota"/>
+        </Method>
+        <Method name="isRecursante" returnType="boolean" visibility="public"/>
+        <Method name="setRecursante" returnType="void" visibility="public">
+          <Argument type="boolean" name="recursante"/>
+        </Method>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Materia" package="Modelo" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields>
+        <Field name="IDmateria" type="Integer" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="año" type="Integer" visibility="private"/>
+        <Field name="estado" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="nombre"/>
+          <Argument type="Integer" name="año"/>
+          <Argument type="boolean" name="estado"/>
+        </Constructor>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getIDmateria" returnType="Integer" visibility="public"/>
+        <Method name="setIDmateria" returnType="void" visibility="public">
+          <Argument type="Integer" name="IDmateria"/>
+        </Method>
+        <Method name="getNombre" returnType="String" visibility="public"/>
+        <Method name="setNombre" returnType="void" visibility="public">
+          <Argument type="String" name="nombre"/>
+        </Method>
+        <Method name="getAño" returnType="Integer" visibility="public"/>
+        <Method name="setAño" returnType="void" visibility="public">
+          <Argument type="Integer" name="año"/>
+        </Method>
+        <Method name="isEstado" returnType="boolean" visibility="public"/>
+        <Method name="setEstado" returnType="void" visibility="public">
+          <Argument type="boolean" name="estado"/>
+        </Method>
+        <Method name="hashCode" returnType="int" visibility="public"/>
+        <Method name="equals" returnType="boolean" visibility="public">
+          <Argument type="Object" name="obj"/>
+        </Method>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>
