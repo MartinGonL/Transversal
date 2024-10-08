@@ -1,7 +1,6 @@
 package Persistencia;
 
 import Modelo.Alumno;
-import Modelo.Inscripcion;
 import Modelo.Materia;
 
 import java.sql.DriverManager;
@@ -61,15 +60,6 @@ public class AlumnoData {
             relacion = "`materia` ";
             atributos = "(`nombre_materia`, `año`, `estado`) ";
             doms = "('" + b.getNombre() + "', '" + b.getAño() + "', " + b.isEstado() + ")";
-        }
-        /**
-        * Editar esta parte.
-        */
-        else if (objeto instanceof Inscripcion c) 
-        {
-            relacion = "`inscripcion` ";
-            atributos = "(`nota`, `idAlumno`, `idMateria`, `recursante`) ";
-            doms = "(" + c.getNota() + ", " + c.getIDalumno() + ", " + c.getIDmateria() + ", " + c.isRecursante() + ")";
         }
         
         String sql = "INSERT INTO " + relacion + atributos + "VALUES " + doms;
@@ -141,7 +131,6 @@ public class AlumnoData {
                         
                         objeto.add(materia);
                     }
-                    case "`inscripcion`" -> { Inscripcion inscripcion = new Inscripcion(); }
                 }
             }
         } 

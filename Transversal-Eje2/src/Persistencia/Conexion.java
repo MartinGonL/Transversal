@@ -9,8 +9,9 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
     
-    public static Connection conectar;
-
+    private static Conexion line;
+    private static Connection conectar;
+    
     public Conexion() {
         try 
         {
@@ -26,6 +27,12 @@ public class Conexion {
         {
             JOptionPane.showInternalMessageDialog(null, "Falla en los Drivers.");
         }
+    }
+    
+    public static Conexion on() {
+        if (line == null) line = new Conexion();
+        
+        return line;
     }
 
     public static void insertTras1() {

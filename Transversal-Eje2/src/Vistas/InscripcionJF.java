@@ -1,9 +1,27 @@
 package Vistas;
 
+import Modelo.Alumno;
+import Modelo.Inscripcion;
+import Modelo.Materia;
+import Persistencia.Funciones;
+import Persistencia.InscripcionData;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 public class InscripcionJF extends javax.swing.JInternalFrame {
 
+    private final ArrayList<Alumno> alumnos = new ArrayList();
+    private final ArrayList<Materia> materias = new ArrayList();
+    private final ArrayList<Inscripcion> inscripciones = new ArrayList();
+    private final InscripcionData funcion;
+    private boolean estadoInsc;
+    
     public InscripcionJF() {
         initComponents();
+        this.funcion = new InscripcionData();
+        this.estadoInsc = true;
+        
+        cargarBoxAlumnos();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -13,16 +31,19 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
         contenedorJP = new javax.swing.JPanel();
         rejistroJL = new javax.swing.JLabel();
         alumnoJL = new javax.swing.JLabel();
-        siguienteJB = new javax.swing.JButton();
-        materiaJL = new javax.swing.JLabel();
-        materiaJCB = new javax.swing.JComboBox<>();
+        alumnoIdJL = new javax.swing.JLabel();
         alumnoJCB = new javax.swing.JComboBox<>();
         buscarPorJL = new javax.swing.JLabel();
-        apellidoJRB = new javax.swing.JRadioButton();
-        idJRB = new javax.swing.JRadioButton();
+        inscriptoJRB = new javax.swing.JRadioButton();
         recursanteJChB = new javax.swing.JCheckBox();
         recurJL = new javax.swing.JLabel();
-        materiaJL1 = new javax.swing.JLabel();
+        materiaIdJL = new javax.swing.JLabel();
+        materiaIdJTF = new javax.swing.JTextField();
+        alumnoIdJTF = new javax.swing.JTextField();
+        panelBotones = new javax.swing.JPanel();
+        notaJB = new javax.swing.JButton();
+        inscribirJB = new javax.swing.JButton();
+        cancelJB = new javax.swing.JButton();
         notaJTF = new javax.swing.JTextField();
 
         jCheckBox1.setText("jCheckBox1");
@@ -32,199 +53,349 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
 
         contenedorJP.setBackground(new java.awt.Color(0, 51, 102));
         contenedorJP.setToolTipText("");
+        contenedorJP.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         rejistroJL.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
         rejistroJL.setForeground(new java.awt.Color(255, 255, 255));
         rejistroJL.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         rejistroJL.setText("Inscripcion");
+        contenedorJP.add(rejistroJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 18, -1, 50));
 
         alumnoJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         alumnoJL.setForeground(new java.awt.Color(255, 255, 255));
         alumnoJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         alumnoJL.setText("Alumno:");
+        contenedorJP.add(alumnoJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
-        siguienteJB.setBackground(new java.awt.Color(255, 204, 0));
-        siguienteJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
-        siguienteJB.setForeground(new java.awt.Color(255, 255, 255));
-        siguienteJB.setText("Siguiente");
-        siguienteJB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                siguienteJBActionPerformed(evt);
-            }
-        });
-
-        materiaJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        materiaJL.setForeground(new java.awt.Color(255, 255, 255));
-        materiaJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        materiaJL.setText("Materia:");
-
-        materiaJCB.setBackground(new java.awt.Color(255, 255, 255));
-        materiaJCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {""}));
-        materiaJCB.setPreferredSize(new java.awt.Dimension(60, 30));
+        alumnoIdJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        alumnoIdJL.setForeground(new java.awt.Color(255, 255, 255));
+        alumnoIdJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        alumnoIdJL.setText("Alumno ID:");
+        contenedorJP.add(alumnoIdJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
+        alumnoIdJL.setVisible(false);
 
         alumnoJCB.setBackground(new java.awt.Color(255, 255, 255));
-        alumnoJCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {""}));
+        alumnoJCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un Valor" }));
+        alumnoJCB.setName(""); // NOI18N
         alumnoJCB.setPreferredSize(new java.awt.Dimension(60, 30));
+        alumnoJCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alumnoJCBActionPerformed(evt);
+            }
+        });
+        contenedorJP.add(alumnoJCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 170, -1));
 
         buscarPorJL.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         buscarPorJL.setForeground(new java.awt.Color(255, 255, 255));
         buscarPorJL.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        buscarPorJL.setText("Buscar por:");
+        buscarPorJL.setText("Materias Inscriptas");
+        contenedorJP.add(buscarPorJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
-        apellidoJRB.setBackground(new java.awt.Color(0, 51, 102));
-        apellidoJRB.setForeground(new java.awt.Color(255, 255, 255));
-        apellidoJRB.setText("Apellido");
-        apellidoJRB.addActionListener(new java.awt.event.ActionListener() {
+        inscriptoJRB.setBackground(new java.awt.Color(0, 51, 102));
+        inscriptoJRB.setForeground(new java.awt.Color(255, 255, 255));
+        inscriptoJRB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                apellidoJRBActionPerformed(evt);
+                inscriptoJRBActionPerformed(evt);
             }
         });
-
-        idJRB.setBackground(new java.awt.Color(0, 51, 102));
-        idJRB.setForeground(new java.awt.Color(255, 255, 255));
-        idJRB.setText("ID");
-        idJRB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idJRBActionPerformed(evt);
-            }
-        });
+        contenedorJP.add(inscriptoJRB, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+        inscriptoJRB.setSelected(true);
 
         recursanteJChB.setBackground(new java.awt.Color(0, 51, 102));
-        recursanteJChB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recursanteJChBActionPerformed(evt);
-            }
-        });
+        recursanteJChB.setName("`recursante`"); // NOI18N
+        contenedorJP.add(recursanteJChB, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 240, 30, 31));
+        recursanteJChB.setVisible(false);
 
         recurJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         recurJL.setForeground(new java.awt.Color(255, 255, 255));
         recurJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         recurJL.setText("Recursante:");
+        contenedorJP.add(recurJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+        recurJL.setVisible(false);
 
-        materiaJL1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        materiaJL1.setForeground(new java.awt.Color(255, 255, 255));
-        materiaJL1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        materiaJL1.setText("Nota:");
+        materiaIdJL.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        materiaIdJL.setForeground(new java.awt.Color(255, 255, 255));
+        materiaIdJL.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        materiaIdJL.setText("Materia ID:");
+        contenedorJP.add(materiaIdJL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
+        materiaIdJL.setVisible(false);
+
+        materiaIdJTF.setBackground(new java.awt.Color(255, 255, 255));
+        materiaIdJTF.setForeground(new java.awt.Color(0, 0, 0));
+        materiaIdJTF.setName("`idMateria`"); // NOI18N
+        materiaIdJTF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                materiaIdJTFFocusGained(evt);
+            }
+        });
+        contenedorJP.add(materiaIdJTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 50, 30));
+        materiaIdJTF.setVisible(false);
+
+        alumnoIdJTF.setBackground(new java.awt.Color(255, 255, 255));
+        alumnoIdJTF.setForeground(new java.awt.Color(0, 0, 0));
+        alumnoIdJTF.setName("`idAlumno`"); // NOI18N
+        alumnoIdJTF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                alumnoIdJTFFocusGained(evt);
+            }
+        });
+        contenedorJP.add(alumnoIdJTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 160, 50, 30));
+        alumnoIdJTF.setVisible(false);
+
+        panelBotones.setBackground(new java.awt.Color(51, 51, 51));
+        panelBotones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        notaJB.setBackground(new java.awt.Color(255, 204, 0));
+        notaJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        notaJB.setForeground(new java.awt.Color(255, 255, 255));
+        notaJB.setText("Cargar Nota");
+        notaJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                notaJBActionPerformed(evt);
+            }
+        });
+        panelBotones.add(notaJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+
+        inscribirJB.setBackground(new java.awt.Color(255, 204, 0));
+        inscribirJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        inscribirJB.setForeground(new java.awt.Color(255, 255, 255));
+        inscribirJB.setText("Inscribir");
+        inscribirJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inscribirJBActionPerformed(evt);
+            }
+        });
+        panelBotones.add(inscribirJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 114, -1));
+
+        cancelJB.setBackground(new java.awt.Color(204, 0, 0));
+        cancelJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
+        cancelJB.setForeground(new java.awt.Color(255, 255, 255));
+        cancelJB.setText("Cancelar");
+        cancelJB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelJBActionPerformed(evt);
+            }
+        });
+        panelBotones.add(cancelJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 114, -1));
+        cancelJB.setVisible(false);
 
         notaJTF.setBackground(new java.awt.Color(255, 255, 255));
         notaJTF.setForeground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout contenedorJPLayout = new javax.swing.GroupLayout(contenedorJP);
-        contenedorJP.setLayout(contenedorJPLayout);
-        contenedorJPLayout.setHorizontalGroup(
-            contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorJPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
-                        .addComponent(buscarPorJL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(apellidoJRB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(idJRB)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
-                        .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(rejistroJL, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contenedorJPLayout.createSequentialGroup()
-                                .addComponent(alumnoJL)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(alumnoJCB, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(materiaJL)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(materiaJCB, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 6, Short.MAX_VALUE))
-                    .addGroup(contenedorJPLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(materiaJL1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(notaJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(recurJL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(recursanteJChB)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(siguienteJB)
-                        .addGap(21, 21, 21))))
-        );
-        contenedorJPLayout.setVerticalGroup(
-            contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenedorJPLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(rejistroJL, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buscarPorJL)
-                    .addComponent(apellidoJRB)
-                    .addComponent(idJRB))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(alumnoJL, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(alumnoJCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(materiaJL)
-                    .addComponent(materiaJCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 61, Short.MAX_VALUE)
-                .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(contenedorJPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(siguienteJB)
-                        .addComponent(materiaJL1)
-                        .addComponent(notaJTF, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(recurJL)
-                    .addComponent(recursanteJChB, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
-        );
+        notaJTF.setName("`nota`"); // NOI18N
+        panelBotones.add(notaJTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 50, 30));
+        notaJTF.setVisible(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedorJP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(contenedorJP, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(contenedorJP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panelBotones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(contenedorJP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarBoxAlumnosApellido() {
+    private void cargarBoxAlumnos() {
+        /*Receteo el Array y cargo los nuevos elementos.*/
+        alumnos.clear();
+        funcion.buscarElementos(alumnos, materias);
+        
+        /*Recorrer cada elemento del array para armar el ComboBox de alumnos usando el numero de ID y el nombre de los mismos.*/
+        for (Alumno alu : alumnos) 
+        {
+            alumnoJCB.addItem(String.valueOf(alu.getIDalumno()) + " " + alu.getNombre());
+        }
+        
+        /*Vacio el Array para un proximo uso*/
+        alumnos.clear();
     }
     
-    private void cargarBoxAlumnosID() {
-    }
+    private void inscriptoJRBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inscriptoJRBActionPerformed
+        /*Muestro determinado mensaje segun el estado del RadioButton.*/
+        buscarPorJL.setText(inscriptoJRB.isSelected() ? "Materias Inscriptas." : "Materias No Inscriptas.");
+        
+        /*Asigno un valor a la variable global*/
+        estadoInsc = (inscriptoJRB.isSelected());
+        
+        /*Refresco la tabla con los resultados correspondientes a cada alumno.*/
+        alumnoJCBActionPerformed(evt);
+    }//GEN-LAST:event_inscriptoJRBActionPerformed
+                                
+    private void notaJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notaJBActionPerformed
+        if (!cancelJB.isVisible()) 
+        {
+            /*Muestro el campo de texto para recibir la nota y el boton cancelar.*/
+            notaJTF.setVisible(true);
+            
+            cancelJB.setVisible(true);
+            
+            /*Anulo los demas botones.*/
+            inscribirJB.setEnabled(false);
+        }
+        else {
+            /*Revierto todos cambios realizados en el bloque anterior y ejecuto la inscripcion.*/
+//            notaJTF.setVisible(false);
+//            
+//            cancelJB.setVisible(false);
+//            
+//            buscarJB.setEnabled(true);
+//            inscribirJB.setEnabled(true);
+        }
+    }//GEN-LAST:event_notaJBActionPerformed
     
-    private void cargarBoxMaterias() {
-    }
-    
-    private void siguienteJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteJBActionPerformed
-    }//GEN-LAST:event_siguienteJBActionPerformed
+    private void inscribirJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inscribirJBActionPerformed
+        if (!cancelJB.isVisible()) 
+        {
+            /*Muestro los campos de texto para recibir los datos de inscripcion y el boton cancelar.*/
+            cancelJB.setVisible(true);
+            
+            alumnoIdJL.setVisible(true);
+            alumnoIdJTF.setVisible(true);
+            materiaIdJTF.setVisible(true);
+            materiaIdJL.setVisible(true);
+            recurJL.setVisible(true);
+            recursanteJChB.setVisible(true);
+            
+            alumnoJL.setVisible(false);
+            alumnoJCB.setVisible(false);
+            buscarPorJL.setVisible(false);
+            inscriptoJRB.setVisible(false);
+            
+            notaJB.setEnabled(false);
+            
+            /*Seteo la variable con el valor false para evitar que el metodo entre en un bucle.*/
+            estadoInsc = false;
+        }
+        else 
+        {
+            /*Controlo que el ususario haya completado todos los campos solicitados.*/
+            boolean FLAG = Funciones.checkField(contenedorJP);
+            if (FLAG) 
+            {
+                /*Instancio las variables que definiran los valores de los atributos de mi objeto.*/
+                int IDalumno = Integer.parseInt(alumnoIdJTF.getText());
+                int IDmateria = Integer.parseInt(materiaIdJTF.getText());
+                boolean recur = recursanteJChB.isSelected();
+                
+                /*Lo instancio el objeto y lo envio al metodo '.cargarElemento()' para realizar la carga de los datos.*/
+                Inscripcion inscripcion = new Inscripcion(IDalumno, IDmateria, recur);
+                funcion.cargarElemento(inscripcion);
+            }
+            else JOptionPane.showMessageDialog(rootPane, "Complete lo campos requeridos.");
+            
+            /*Receteo los campos utilizados.*/
+            Funciones.cleanField(contenedorJP);
+            recursanteJChB.setSelected(false);
+            InicioJDP.resetTable();
+        }
+    }//GEN-LAST:event_inscribirJBActionPerformed
 
-    private void apellidoJRBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apellidoJRBActionPerformed
-    }//GEN-LAST:event_apellidoJRBActionPerformed
+    private void cancelJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelJBActionPerformed
+        /*Revierto todo cambio realizado en los metodos anteriores.*/
+        inscribirJB.setEnabled(true);
+        buscarPorJL.setVisible(true);
+        inscriptoJRB.setVisible(true);
+        alumnoJL.setVisible(true);
+        alumnoJCB.setVisible(true);
 
-    private void idJRBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idJRBActionPerformed
-    }//GEN-LAST:event_idJRBActionPerformed
+        notaJB.setEnabled(true);
+        notaJTF.setVisible(false);
 
-    private void recursanteJChBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recursanteJChBActionPerformed
-    }//GEN-LAST:event_recursanteJChBActionPerformed
+        alumnoIdJTF.setVisible(false);
+        alumnoIdJL.setVisible(false);
+        materiaIdJL.setVisible(false);
+        materiaIdJTF.setVisible(false);
+        recurJL.setVisible(false);
+        recursanteJChB.setVisible(false);
+
+        cancelJB.setVisible(false);
+        
+        /*Reinico la variable.*/
+        estadoInsc = true;
+    }//GEN-LAST:event_cancelJBActionPerformed
+
+    private void alumnoJCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alumnoJCBActionPerformed
+        /*Vacio y cargo en el Array las respectivas materias de cada alumno.*/
+        materias.clear();
+        inscripciones.clear();
+        funcion.buscarPorID(materias, inscripciones, alumnoJCB, estadoInsc);
+        
+        /*Receteo y las muestro dependiendo de la bandera.*/
+        InicioJDP.resetTable();
+        if (estadoInsc) 
+        {
+            InicioJDP.setColum(new Inscripcion());
+            InicioJDP.setRow(inscripciones, materias);
+        }
+        else 
+        {
+            InicioJDP.setColum(new Materia());
+            InicioJDP.setRow((ArrayList<Object>)(Object)materias);
+        }
+    }//GEN-LAST:event_alumnoJCBActionPerformed
+
+    private void alumnoIdJTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_alumnoIdJTFFocusGained
+        /*Vacio y relleno el Array de alumnos*/
+        alumnos.clear();
+        funcion.buscarElementos(alumnos, materias);
+        
+        /*Receteo y los muestro.*/
+        InicioJDP.resetTable();
+        InicioJDP.setColum(new Alumno());
+        InicioJDP.setRow((ArrayList<Object>)(Object)alumnos);
+    }//GEN-LAST:event_alumnoIdJTFFocusGained
+
+    private void materiaIdJTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materiaIdJTFFocusGained
+        /**/
+        if (!alumnoIdJTF.getText().equals("")) 
+        {
+            /*Vacio y relleno el Array de materias.*/
+            materias.clear();
+            funcion.buscarPorIDTxt(materias, alumnoIdJTF);
+
+            /*Receteo y las muestro.*/
+            InicioJDP.resetTable();
+            InicioJDP.setColum(new Materia());
+            InicioJDP.setRow((ArrayList<Object>)(Object)materias);
+        }
+        else if (!estadoInsc) 
+        {
+            JOptionPane.showMessageDialog(rootPane, "Primero seleccione un Alumno.");
+            estadoInsc = true;
+        }
+    }//GEN-LAST:event_materiaIdJTFFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel alumnoIdJL;
+    private javax.swing.JTextField alumnoIdJTF;
     private javax.swing.JComboBox<String> alumnoJCB;
     private javax.swing.JLabel alumnoJL;
-    private javax.swing.JRadioButton apellidoJRB;
     private javax.swing.JLabel buscarPorJL;
+    private javax.swing.JButton cancelJB;
     private javax.swing.JPanel contenedorJP;
-    private javax.swing.JRadioButton idJRB;
+    private javax.swing.JButton inscribirJB;
+    private javax.swing.JRadioButton inscriptoJRB;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox<String> materiaJCB;
-    private javax.swing.JLabel materiaJL;
-    private javax.swing.JLabel materiaJL1;
+    private javax.swing.JLabel materiaIdJL;
+    private javax.swing.JTextField materiaIdJTF;
+    private javax.swing.JButton notaJB;
     private javax.swing.JTextField notaJTF;
+    private javax.swing.JPanel panelBotones;
     private javax.swing.JLabel recurJL;
     private javax.swing.JCheckBox recursanteJChB;
     private javax.swing.JLabel rejistroJL;
-    private javax.swing.JButton siguienteJB;
     // End of variables declaration//GEN-END:variables
 }

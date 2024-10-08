@@ -146,6 +146,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
         );
 
         panelBotones.setBackground(new java.awt.Color(51, 51, 51));
+        panelBotones.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         crearJB.setBackground(new java.awt.Color(255, 204, 0));
         crearJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -156,6 +157,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
                 crearJBActionPerformed(evt);
             }
         });
+        panelBotones.add(crearJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 106, -1));
 
         actJB.setBackground(new java.awt.Color(255, 204, 0));
         actJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -166,6 +168,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
                 actJBActionPerformed(evt);
             }
         });
+        panelBotones.add(actJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 106, -1));
 
         buscarJB.setBackground(new java.awt.Color(255, 204, 0));
         buscarJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -176,6 +179,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
                 buscarJBActionPerformed(evt);
             }
         });
+        panelBotones.add(buscarJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 106, -1));
 
         desJB.setBackground(new java.awt.Color(255, 51, 0));
         desJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -186,6 +190,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
                 desJBActionPerformed(evt);
             }
         });
+        panelBotones.add(desJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
 
         deleteJB.setBackground(new java.awt.Color(204, 0, 0));
         deleteJB.setFont(new java.awt.Font("sansserif", 1, 13)); // NOI18N
@@ -196,36 +201,7 @@ public class MateriaJF extends javax.swing.JInternalFrame {
                 deleteJBActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout panelBotonesLayout = new javax.swing.GroupLayout(panelBotones);
-        panelBotones.setLayout(panelBotonesLayout);
-        panelBotonesLayout.setHorizontalGroup(
-            panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBotonesLayout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(crearJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(actJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(desJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(deleteJB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buscarJB, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
-        );
-        panelBotonesLayout.setVerticalGroup(
-            panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotonesLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(crearJB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(actJB)
-                .addGap(10, 10, 10)
-                .addComponent(buscarJB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(desJB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteJB)
-                .addGap(16, 16, 16))
-        );
+        panelBotones.add(deleteJB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 106, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

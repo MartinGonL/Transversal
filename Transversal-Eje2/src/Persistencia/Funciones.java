@@ -44,10 +44,6 @@ public class Funciones {
             {
                 txt.setText("");
             }
-            if (component instanceof JComboBox combo) 
-            {
-                combo.setSelectedIndex(-1);
-            }
         }
     }
     

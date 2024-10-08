@@ -1,9 +1,9 @@
 package Vistas;
 
 import Modelo.Alumno;
+import Modelo.Inscripcion;
 import Modelo.Materia;
 import java.util.ArrayList;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class InicioJDP extends javax.swing.JFrame {
@@ -18,7 +18,6 @@ public class InicioJDP extends javax.swing.JFrame {
         initComponents();
         
         setLocationRelativeTo(null);
-//        setColum();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -175,9 +174,11 @@ public class InicioJDP extends javax.swing.JFrame {
 
         escritorioDP.add(inscripcionFrame);
         escritorioDP.moveToFront(inscripcionFrame);
+        
+        setColum(inscripcionFrame);
     }//GEN-LAST:event_inscribirJMItemActionPerformed
     
-    private void setColum(Object objeto) {
+    public static void setColum(Object objeto) {
         mTabla = new DefaultTableModel() {
             public boolean celdaEditable(int fila, int col) {
                 
@@ -185,7 +186,7 @@ public class InicioJDP extends javax.swing.JFrame {
             }
         };
         
-        if (objeto instanceof AlumnoJF) 
+        if (objeto instanceof AlumnoJF | objeto instanceof Alumno) 
         {
             mTabla.addColumn("ID");
             mTabla.addColumn("Nombre");
@@ -196,12 +197,22 @@ public class InicioJDP extends javax.swing.JFrame {
 
             tablaJT.setModel(mTabla);
         }
-        else if (objeto instanceof MateriaJF) 
+        else if (objeto instanceof MateriaJF | objeto instanceof Materia) 
         {
             mTabla.addColumn("ID");
             mTabla.addColumn("Materia");
             mTabla.addColumn("Año");
             mTabla.addColumn("Activo");
+            
+            tablaJT.setModel(mTabla);
+        }
+        else if (objeto instanceof InscripcionJF | objeto instanceof Inscripcion) 
+        {
+            mTabla.addColumn("ID");
+            mTabla.addColumn("Materia");
+            mTabla.addColumn("Año");
+            mTabla.addColumn("Nota");
+            mTabla.addColumn("Recursante");
             
             tablaJT.setModel(mTabla);
         }
@@ -234,6 +245,22 @@ public class InicioJDP extends javax.swing.JFrame {
         tablaJT.setModel(mTabla);
     }
     
+    /*2° Metodo*/
+    public static void setRow(ArrayList<Inscripcion> inscripciones, ArrayList<Materia> materias) {
+        for (int i = 0; i < inscripciones.size(); i++) 
+        {
+            mTabla.addRow(new Object[]{
+                materias.get(i).getIDmateria(),
+                materias.get(i).getNombre(),
+                materias.get(i).getAño(),
+                inscripciones.get(i).getNota(),
+                inscripciones.get(i).isRecursante()
+            });
+        }
+        
+        tablaJT.setModel(mTabla);
+    }
+    
     public static void resetTable() {
         int x = mTabla.getRowCount()-1;
         
@@ -260,10 +287,8 @@ public class InicioJDP extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(InicioJDP.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InicioJDP().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new InicioJDP().setVisible(true);
         });
     }
 
@@ -283,9 +308,4 @@ public class InicioJDP extends javax.swing.JFrame {
     private static javax.swing.JTable tablaJT;
     // End of variables declaration//GEN-END:variables
 }
-/*escritorio.removeAll();
-        escritorio.repaint();
-        AltaMaterias a2 = new AltaMaterias(mat);
-        a2.setVisible(true);
-        escritorio.add(a2);
-        escritorio.moveToFront(a2);\*/
+/**/

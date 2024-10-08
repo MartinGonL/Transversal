@@ -10,10 +10,9 @@ public class Inscripcion {
     private Integer nota;
     private boolean recursante;
 
-    public Inscripcion(Integer IDalumno, Integer IDmateria, Integer nota, boolean recursante) {
+    public Inscripcion(Integer IDalumno, Integer IDmateria, boolean recursante) {
         this.IDalumno = IDalumno;
         this.IDmateria = IDmateria;
-        this.nota = nota;
         this.recursante = recursante;
     }
 
@@ -100,9 +99,6 @@ public class Inscripcion {
 
     @Override
     public String toString() {
-        return "Inscripcion: \nID de Inscripcion: " + IDinscripcion + ". ID de Alumno: " + IDalumno + ". ID de Materia: " + IDmateria + ". Nota: " + nota + ". Inscripto: " + recursante + ".";
+        return "Inscripcion: \nID de Inscripcion: " + IDinscripcion + ". ID de Alumno: " + IDalumno + ". ID de Materia: " + IDmateria + ". Nota: " + nota + ". Recursante: " + recursante + ".";
     }
-    
-    
-    
 }
