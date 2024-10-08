@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -220,6 +222,50 @@ public class InscripcionData {
         catch (SQLException ex) 
         {
             JOptionPane.showMessageDialog(null, "Error. Falla en la sintaxis.");
+        }
+    }
+    
+    public void cargarNota(ArrayList<Materia> materias, String IDA, String IDM, String nota) {
+        if (nota.equals("")) 
+        {
+            String sql = "SELECT a.idMateria, `nombre_materia`, `año`, `estado` FROM `materia` a JOIN inscripcion b ON a.idMateria = b.idMateria WHERE b.idAlumno = " + IDA;
+            
+            try 
+            {
+                sentencia = conexion.prepareStatement(sql);
+                resultado = sentencia.executeQuery();
+                
+                while (resultado.next())
+                {
+                    Materia materia = new Materia();
+                    materia.setIDmateria(resultado.getInt("idMateria"));
+                    materia.setNombre(resultado.getString("nombre_materia"));
+                    materia.setAño(resultado.getInt("año"));
+                    materia.setEstado(resultado.getBoolean("estado"));
+
+                    materias.add(materia);
+                }
+            } 
+            catch (SQLException ex) 
+            {
+                JOptionPane.showMessageDialog(null, "Error. Falla en la Sintaxis.");
+            }
+        }
+        else 
+        {
+            String sql = "UPDATE `inscripcion` SET `nota` = " + nota + " WHERE `idAlumno` = " + IDA + " AND `idMateria` = " + IDM;
+            
+            try 
+            {
+                sentencia = conexion.prepareStatement(sql);
+                
+                int fila = sentencia.executeUpdate();
+                if (fila > 0) JOptionPane.showMessageDialog(null, "Nota Cargada.");
+            } 
+            catch (SQLException ex) 
+            {
+                JOptionPane.showMessageDialog(null, "Error. Falla en la Sintaxis.");
+            }
         }
     }
 }

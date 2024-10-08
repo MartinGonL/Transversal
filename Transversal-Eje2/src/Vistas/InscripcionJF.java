@@ -15,11 +15,13 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
     private final ArrayList<Inscripcion> inscripciones = new ArrayList();
     private final InscripcionData funcion;
     private boolean estadoInsc;
+    private boolean FLAG;
     
     public InscripcionJF() {
         initComponents();
         this.funcion = new InscripcionData();
         this.estadoInsc = true;
+        this.FLAG = false;
         
         cargarBoxAlumnos();
     }
@@ -128,6 +130,11 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
                 materiaIdJTFFocusGained(evt);
             }
         });
+        materiaIdJTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                materiaIdJTFKeyReleased(evt);
+            }
+        });
         contenedorJP.add(materiaIdJTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 50, 30));
         materiaIdJTF.setVisible(false);
 
@@ -137,6 +144,11 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
         alumnoIdJTF.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 alumnoIdJTFFocusGained(evt);
+            }
+        });
+        alumnoIdJTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                alumnoIdJTFKeyReleased(evt);
             }
         });
         contenedorJP.add(alumnoIdJTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 160, 50, 30));
@@ -237,22 +249,28 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
     private void notaJBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notaJBActionPerformed
         if (!cancelJB.isVisible()) 
         {
-            /*Muestro el campo de texto para recibir la nota y el boton cancelar.*/
-            notaJTF.setVisible(true);
+            /*Muestro el campo de texto para buscar al alumno.*/
+            alumnoIdJL.setVisible(true);
+            alumnoIdJTF.setVisible(true);
             
             cancelJB.setVisible(true);
             
             /*Anulo los demas botones.*/
             inscribirJB.setEnabled(false);
+            
+            FLAG = true;
         }
-        else {
-            /*Revierto todos cambios realizados en el bloque anterior y ejecuto la inscripcion.*/
-//            notaJTF.setVisible(false);
-//            
-//            cancelJB.setVisible(false);
-//            
-//            buscarJB.setEnabled(true);
-//            inscribirJB.setEnabled(true);
+        else 
+        {
+            if (!notaJTF.getText().equals("")) 
+            {
+                funcion.cargarNota(materias, alumnoIdJTF.getText(), materiaIdJTF.getText(), notaJTF.getText());
+                FLAG = false;
+                
+                Funciones.cleanField(panelBotones);
+                Funciones.cleanField(contenedorJP);
+            }
+            else JOptionPane.showMessageDialog(rootPane, "Ingrese una Nota.");
         }
     }//GEN-LAST:event_notaJBActionPerformed
     
@@ -282,8 +300,8 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
         else 
         {
             /*Controlo que el ususario haya completado todos los campos solicitados.*/
-            boolean FLAG = Funciones.checkField(contenedorJP);
-            if (FLAG) 
+            boolean flag = Funciones.checkField(contenedorJP);
+            if (flag) 
             {
                 /*Instancio las variables que definiran los valores de los atributos de mi objeto.*/
                 int IDalumno = Integer.parseInt(alumnoIdJTF.getText());
@@ -325,6 +343,7 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
         
         /*Reinico la variable.*/
         estadoInsc = true;
+        FLAG = false;
     }//GEN-LAST:event_cancelJBActionPerformed
 
     private void alumnoJCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alumnoJCBActionPerformed
@@ -359,8 +378,9 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_alumnoIdJTFFocusGained
 
     private void materiaIdJTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_materiaIdJTFFocusGained
-        /**/
-        if (!alumnoIdJTF.getText().equals("")) 
+        /*Espero a que el ususario cargue el N° de ID del alumno para poder mostrar las materias a las que NO esta inscripto.
+        Tambien me aseguro por medio de la bandera que la accion NO sea llamada por el metodo '.notaJBActionPerformed(...)'*/
+        if (!alumnoIdJTF.getText().equals("") & FLAG == false) 
         {
             /*Vacio y relleno el Array de materias.*/
             materias.clear();
@@ -376,7 +396,62 @@ public class InscripcionJF extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Primero seleccione un Alumno.");
             estadoInsc = true;
         }
+        /*Si este metodo es llamado por '.notaJBActionPerformed(...)' muestro todas las materias inscriptas del alumno.*/
+        else if (FLAG) 
+        {
+            materias.clear();
+            funcion.cargarNota(materias, alumnoIdJTF.getText(), materiaIdJTF.getText(), notaJTF.getText());
+            
+            InicioJDP.resetTable();
+            InicioJDP.setColum(new Materia());
+            InicioJDP.setRow((ArrayList<Object>) (Object) materias);
+        }
     }//GEN-LAST:event_materiaIdJTFFocusGained
+
+    private void alumnoIdJTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_alumnoIdJTFKeyReleased
+        try {   
+            if (FLAG) 
+            {
+                for (Alumno alumno : alumnos) 
+                {
+                    int id = Integer.parseInt(alumnoIdJTF.getText());
+                    
+                    if (alumno.getIDalumno() == id) 
+                    {
+                        materiaIdJL.setVisible(true);
+                        materiaIdJTF.setVisible(true);
+                        break;
+                    }
+                    else 
+                    {
+                        materiaIdJL.setVisible(false);
+                        materiaIdJTF.setVisible(false);
+                    }
+                }
+            }
+        }
+        catch (NumberFormatException ex) {}
+    }//GEN-LAST:event_alumnoIdJTFKeyReleased
+
+    private void materiaIdJTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_materiaIdJTFKeyReleased
+        try {   
+            if (FLAG) 
+            {
+                for (Materia materia : materias) 
+                {
+                    int id = Integer.parseInt(materiaIdJTF.getText());
+                    
+                    if (materia.getIDmateria() == id) 
+                    {
+                        notaJTF.setVisible(true);
+                        break;
+                    }
+                    else notaJTF.setVisible(false);
+                }
+            }
+        }
+        catch (NumberFormatException ex) {}
+    }//GEN-LAST:event_materiaIdJTFKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alumnoIdJL;
